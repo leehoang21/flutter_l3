@@ -29,15 +29,15 @@ class ApiClient extends GetxService {
     updateHeader(
       token,
       null,
-      sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ?? "vi",
+      sharedPreferences.getString(AppConstants.LANGUAGE_CODE),
       0,
     );
   }
 
   void updateHeader(
-      String token, List<int>? zoneIDs, String languageCode, int moduleID) {
+      String token, List<int>? zoneIDs, String? languageCode, int moduleID) {
     Map<String, String> _header = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
       AppConstants.LOCALIZATION_KEY:
           languageCode ?? AppConstants.languages[0].languageCode,
       'Authorization': '$token'
@@ -64,7 +64,7 @@ class ApiClient extends GetxService {
   }
 
   Future<Response> postData(String uri, dynamic body,
-      {required Map<String, String> headers}) async {
+      Map<String, String>? headers) async {
     try {
       if (Foundation.kDebugMode) {
         print('====> API Call: $uri\nHeader: $_mainHeaders');

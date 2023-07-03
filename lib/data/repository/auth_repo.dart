@@ -25,7 +25,7 @@ class AuthRepo {
                 clientSecret: "secret",
                 grantType: "password")
             .toJson(),
-        headers: {});
+        null);
   }
 
   Future<String> _saveDeviceToken() async {
