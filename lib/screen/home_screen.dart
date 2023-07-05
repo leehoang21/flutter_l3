@@ -43,7 +43,7 @@ class _HomeScreentState extends State<HomeScreent> {
 
   void logOut() {
     Get.find<AuthController>().logOut().then((value) => {
-      if(value){
+      if(value == 200){
         Get.offNamed(RouteHelper.signIn)
       }
       else {

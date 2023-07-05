@@ -139,7 +139,7 @@ class ApiClient extends GetxService {
   }
 
   Future<Response> deleteData(String uri,
-      {required Map<String, String> headers}) async {
+      {Map<String, String>? headers}) async {
     try {
       if (Foundation.kDebugMode) {
         print('====> API Call: $uri\nHeader: $_mainHeaders');

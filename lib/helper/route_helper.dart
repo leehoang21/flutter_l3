@@ -1,10 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:timesheet/screen/home_screen.dart';
-import 'package:timesheet/screen/onboard_2_screen.dart';
 import 'package:timesheet/screen/sign_in_screen.dart';
-
-import '../screen/onboard_1_screen.dart';
 import '../screen/splash_screen.dart';
 
 class RouteHelper {
@@ -88,8 +85,6 @@ class RouteHelper {
     // GetPage(name: initial, page: () => getRoute(DashboardScreen(pageIndex: 0))),
     GetPage(name: splash, page: () => const SplashScreen()),
     GetPage(name: signIn, page: () => const SignInScreen()),
-    GetPage(name: onBoarding1, page: () => const OnboardOneScreen()),
-    GetPage(name: onBoarding2, page: () => const OnboardTwoScreen()),
     GetPage(name: main, page: () => const HomeScreent()),
     // GetPage(
     //     name: language,

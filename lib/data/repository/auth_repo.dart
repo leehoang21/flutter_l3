@@ -39,8 +39,8 @@ class AuthRepo {
     ).toJson(),null);
   }
 
-  Future<bool> logOut() async {
-    return await apiClient.logOut(AppConstants.LOG_OUT);
+  Future<Response> logOut() async {
+    return await apiClient.deleteData(AppConstants.LOG_OUT);
   }
 
 
@@ -64,6 +64,9 @@ class AuthRepo {
         sharedPreferences.getString(AppConstants.LANGUAGE_CODE)!, 0);
     return await sharedPreferences.setString(
         AppConstants.TOKEN, "Bearer $token");
+  }
+  Future<bool> clearUserToken() async {
+    return await sharedPreferences.remove(AppConstants.TOKEN);
   }
 
   String getUserToken() {

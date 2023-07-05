@@ -55,27 +55,35 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GetBuilder<SplashController>(builder: (splashController) {
-        return Center(
-          child: splashController.hasConnection
-              ? Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(Images.logo, width: 200),
-                    const SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                    // Text(AppConstants.APP_NAME, style: robotoMedium.copyWith(fontSize: 25)),
-                  ],
-                )
-              : NoInternetScreen(child: const SplashScreen()),
+        return Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          color: Colors.white,
+          child: Center(
+            child: splashController.hasConnection
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(Images.logo, width: 200),
+                      const SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                      // Text(AppConstants.APP_NAME, style: robotoMedium.copyWith(fontSize: 25)),
+                    ],
+                  )
+                : NoInternetScreen(child: const SplashScreen()),
+          ),
         );
       }),
     );
   }
 
   _route() {
-    Get.find<SplashController>().isUpdateVersion().then((value) => {
-          Timer(const Duration(seconds: 0), () async {
-            Get.offNamed(RouteHelper.onBoarding1);
-          })
-        });
+    Timer(const Duration(milliseconds: 1500), () async {
+      Get.offNamed(RouteHelper.signIn);
+    });
+    // Get.find<SplashController>().isUpdateVersion().then((value) => {
+    //       Timer(const Duration(seconds: 1000), () async {
+    //         Get.offNamed(RouteHelper.signIn);
+    //       })
+    //     });
   }
 }

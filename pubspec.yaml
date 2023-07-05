@@ -138,6 +138,7 @@ flutter:
     - assets/image/
     - assets/language/
     - assets/animationFile/
+    - assets/image/logo_login.jpg
 
   fonts:
     - family: NotoSerif

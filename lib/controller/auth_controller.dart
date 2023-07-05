@@ -7,7 +7,7 @@ class AuthController extends GetxController implements GetxService {
 
   AuthController({required this.repo});
 
-  bool _loading = false;
+  bool _loading = true;
 
   bool get loading => _loading;
 
@@ -22,8 +22,13 @@ class AuthController extends GetxController implements GetxService {
     _loading = false;
     return response.statusCode!;
   }
-  Future<bool> logOut() async {
+  Future<int> logOut() async {
     _loading = true;
-    return await repo.logOut();
+    Response response = await repo.logOut();
+    if(response.statusCode == 20){
+      repo.clearUserToken();
+    }
+    _loading = false;
+    return response.statusCode!;
   }
 }
