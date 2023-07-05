@@ -11,21 +11,38 @@ class OnboardOneScreen extends StatefulWidget {
   State<OnboardOneScreen> createState() => _OnboardOneScreenState();
 }
 
-class _OnboardOneScreenState extends State<OnboardOneScreen> {
+class _OnboardOneScreenState extends State<OnboardOneScreen>
+    with TickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(duration: const Duration(seconds: 2), vsync: this);
+  late final Animation<double> _animation = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.,
+  );
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-            child: Scrollbar(
-      child: SingleChildScrollView(
-        child: Column(children: [
-          Image.asset(Images.onboard_1),
-          Container(
-              margin: const EdgeInsets.only(top: 40),
-              child: const Text("Find you Comfort\nFood here",
-                  style: TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold, height: 1.3),
-                  textAlign: TextAlign.center)),
+    return FadeTransition(
+        opacity: _animation,
+        child: Scaffold(
+            body: Center(
+                child: Scrollbar(
+          child: SingleChildScrollView(
+            child: Column(children: [
+              Image.asset(Images.onboard_1),
+              Container(
+                  margin: const EdgeInsets.only(top: 40),
+                  child: const Text("Find you Comfort\nFood here",
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          height: 1.3),
+                      textAlign: TextAlign.center)),
           Container(
             margin: const EdgeInsets.fromLTRB(64, 20, 64, 0),
             child: const Text(
@@ -42,16 +59,16 @@ class _OnboardOneScreenState extends State<OnboardOneScreen> {
               },
               child: Container(
                 padding: EdgeInsets.fromLTRB(40, 18, 40, 18),
-                child: Text("Next", style: TextStyle(fontSize: 16)),
-              ),
-              style: TextButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-              ),
-            ),
-          )
-        ]),
-      ),
-    )));
+                    child: Text("Next", style: TextStyle(fontSize: 16)),
+                  ),
+                  style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                  ),
+                ),
+              )
+            ]),
+          ),
+        ))));
   }
 }

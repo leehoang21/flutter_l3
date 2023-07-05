@@ -45,7 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     Container(
                       margin: const EdgeInsets.only(top: 20),
                       child: TextFormField(
-                        controller: _passwordController,
+                        controller: _usernameController,
                         decoration: InputDecoration(
                             contentPadding: const EdgeInsets.only(left: 28),
                             border: OutlineInputBorder(
@@ -61,7 +61,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     Container(
                       margin: const EdgeInsets.only(top: 20),
                       child: TextFormField(
-                        controller: _usernameController,
+                        controller: _passwordController,
                         decoration: InputDecoration(
                             contentPadding: const EdgeInsets.only(left: 28),
                             border: OutlineInputBorder(

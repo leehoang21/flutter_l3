@@ -13,6 +13,7 @@ class AuthController extends GetxController implements GetxService {
 
   Future<int> login(String username, String password) async {
     _loading = true;
+    update();
     Response response =
         await repo.login(username: username, password: password);
     if (response.statusCode == 200) {
@@ -20,6 +21,7 @@ class AuthController extends GetxController implements GetxService {
       repo.saveUserToken(tokeBody.accessToken!);
     }
     _loading = false;
+    update();
     return response.statusCode!;
   }
 }

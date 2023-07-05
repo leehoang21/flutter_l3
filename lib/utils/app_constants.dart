@@ -3,7 +3,7 @@ import '../data/model/language_model.dart';
 import 'images.dart';
 
 class AppConstants {
-  static const String APP_NAME = 'Base ';
+  static const String APP_NAME = 'Base';
   static const String APP_VERSION = "1.0.0";
 
   static const String BASE_URL = 'http://android-tracking.oceantech.com.vn';

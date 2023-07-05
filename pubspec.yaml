@@ -118,7 +118,7 @@ dev_dependencies:
   firebase_crashlytics: ^3.0.2
   firebase_core: ^2.1.0
   firebase_messaging: ^14.0.2
-
+  salomon_bottom_bar: ^3.3.2
 flutter_icons:
   android: "launcher_icon"
   ios: true

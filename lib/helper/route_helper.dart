@@ -90,74 +90,8 @@ class RouteHelper {
     GetPage(name: signIn, page: () => const SignInScreen()),
     GetPage(name: onBoarding1, page: () => const OnboardOneScreen()),
     GetPage(name: onBoarding2, page: () => const OnboardTwoScreen()),
-    GetPage(name: main, page: () => const HomeScreent()),
-    // GetPage(
-    //     name: language,
-    //     page: () =>
-    //         ChooseLanguageScreen(fromMenu: Get.parameters['page'] == 'menu')),
-    // GetPage(name: onBoarding, page: () => OnBoardingScreen()),
-    // GetPage(
-    //     name: signIn,
-    //     page: () => SignInScreen(
-    //           exitFromApp: Get.parameters['page'] == signUp ||
-    //               Get.parameters['page'] == splash ||
-    //               Get.parameters['page'] == onBoarding,
-    //         )),
-    // GetPage(name: signUp, page: () => SignUpScreen()),
-    // GetPage(
-    //     name: verification,
-    //     page: () {
-    //       List<int> _decode =
-    //           base64Decode(Get.parameters['pass'].replaceAll(' ', '+'));
-    //       String _data = utf8.decode(_decode);
-    //       return VerificationScreen(
-    //         number: Get.parameters['number'],
-    //         fromSignUp: Get.parameters['page'] == signUp,
-    //         token: Get.parameters['token'],
-    //         password: _data,
-    //       );
-    //     }),
-    // GetPage(
-    //     name: accessLocation,
-    //     page: () => AccessLocationScreen(
-    //           fromSignUp: Get.parameters['page'] == signUp,
-    //           fromHome: Get.parameters['page'] == 'home',
-    //           route: null,
-    //         )),
-    // GetPage(
-    //     name: pickMap,
-    //     page: () {
-    //       PickMapScreen _pickMapScreen = Get.arguments;
-    //       bool _fromAddress = Get.parameters['page'] == 'add-address';
-    //       return ((Get.parameters['page'] == 'parcel' &&
-    //                   _pickMapScreen == null) ||
-    //               (_fromAddress && _pickMapScreen == null))
-    //           ? NotFound()
-    //           : _pickMapScreen != null
-    //               ? _pickMapScreen
-    //               : PickMapScreen(
-    //                   fromSignUp: Get.parameters['page'] == signUp,
-    //                   fromAddAddress: _fromAddress,
-    //                   route: Get.parameters['page'],
-    //                   canRoute: Get.parameters['route'] == 'true',
-    //                 );
-    //     }),
-    // GetPage(name: interest, page: () => InterestScreen()),
-    // GetPage(
-    //     name: main,
-    //     page: () => getRoute(DashboardScreen(
-    //           pageIndex: Get.parameters['page'] == 'home'
-    //               ? 0
-    //               : Get.parameters['page'] == 'favourite'
-    //                   ? 1
-    //                   : Get.parameters['page'] == 'cart'
-    //                       ? 2
-    //                       : Get.parameters['page'] == 'order'
-    //                           ? 3
-    //                           : Get.parameters['page'] == 'menu'
-    //                               ? 4
-    //                               : 0,
-    //         ))),
+    GetPage(name: main, page: () => const HomeScreen()),
+
   ];
 
   static getRoute(Widget navigateTo) {

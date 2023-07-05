@@ -12,6 +12,11 @@ class Images {
   static const String onboard_1 = 'assets/image/img_1.png';
   static const String onboard_2 = 'assets/image/img_2.png';
   static const String background_sign_in = 'assets/image/img_3.png';
+  static const String icon_notification = 'assets/image/img_5.png';
+
+
+
+
   static const String restaurant_marker = 'assets/image/restaurant_marker.png';
   static const String delivery_man_marker = 'assets/image/delivery_man_marker.png';
   static const String user = 'assets/image/user.png';
