@@ -22,4 +22,8 @@ class AuthController extends GetxController implements GetxService {
     _loading = false;
     return response.statusCode!;
   }
+  Future<bool> logOut() async {
+    _loading = true;
+    return await repo.logOut();
+  }
 }

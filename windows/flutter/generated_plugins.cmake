@@ -8,7 +8,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   firebase_core
   flutter_secure_storage_windows
   geolocator_windows
-  image_compression_flutter
   local_auth_windows
   modal_progress_hud_nsn
   permission_handler_windows

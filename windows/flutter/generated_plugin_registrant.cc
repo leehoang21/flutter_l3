@@ -11,7 +11,6 @@
 #include <firebase_core/firebase_core_plugin_c_api.h>
 #include <flutter_secure_storage_windows/flutter_secure_storage_windows_plugin.h>
 #include <geolocator_windows/geolocator_windows.h>
-#include <image_compression_flutter/image_compression_flutter_plugin.h>
 #include <local_auth_windows/local_auth_plugin.h>
 #include <modal_progress_hud_nsn/modal_progress_hud_nsn_plugin.h>
 #include <permission_handler_windows/permission_handler_windows_plugin.h>
@@ -29,8 +28,6 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("FlutterSecureStorageWindowsPlugin"));
   GeolocatorWindowsRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("GeolocatorWindows"));
-  ImageCompressionFlutterPluginRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("ImageCompressionFlutterPlugin"));
   LocalAuthPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("LocalAuthPlugin"));
   ModalProgressHudNsnPluginRegisterWithRegistrar(

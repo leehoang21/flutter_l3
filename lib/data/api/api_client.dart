@@ -37,7 +37,7 @@ class ApiClient extends GetxService {
   void updateHeader(
       String token, List<int>? zoneIDs, String? languageCode, int moduleID) {
     Map<String, String> _header = {
-      'Content-Type': 'application/json; charset=utf-8',
+      'Content-Type': 'application/x-www-form-urlencoded',
       AppConstants.LOCALIZATION_KEY:
           languageCode ?? AppConstants.languages[0].languageCode,
       'Authorization': '$token'
@@ -72,7 +72,7 @@ class ApiClient extends GetxService {
       }
       Http.Response _response = await Http.post(
         Uri.parse(appBaseUrl + uri),
-        body: jsonEncode(body),
+        body: body,
         headers: headers ?? _mainHeaders,
       ).timeout(Duration(seconds: timeoutInSeconds));
       return handleResponse(_response, uri);
@@ -80,7 +80,15 @@ class ApiClient extends GetxService {
       return Response(statusCode: 1, statusText: noInternetMessage);
     }
   }
-
+  Future<bool> logOut(String uri) async {
+    final url = Uri.parse(appBaseUrl + uri);
+    final response = await Http.delete(url);
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
+  
   Future<Response> postMultipartData(
       String uri, Map<String, String> body, List<MultipartBody> multipartBody,
       {required Map<String, String> headers}) async {

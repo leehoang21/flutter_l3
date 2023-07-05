@@ -17,12 +17,13 @@ class SplashController extends GetxController implements GetxService {
   String get version => _version;
 
   Future<bool> isUpdateVersion() async {
-    Response response = await repo.getConfig();
-    if (response.statusCode == 200) {
-      ConfigResponse _data = ConfigResponse.fromJson(response.body);
-      return _data.versionName == AppConstants.APP_VERSION;
-    } else {
-      return false;
-    }
+    // Response response = await repo.getConfig();
+    // if (response.statusCode == 200) {
+    //   ConfigResponse _data = ConfigResponse.fromJson(response.body);
+    //   return _data.versionName == AppConstants.APP_VERSION;
+    // } else {
+    //   return false;
+    // }
+    return true;
   }
 }

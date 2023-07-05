@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timesheet/data/model/body/role.dart';
 import 'package:timesheet/data/model/body/token_request.dart';
+import 'package:timesheet/data/model/body/user.dart';
 
 import '../../utils/app_constants.dart';
 import '../api/api_client.dart';
@@ -19,14 +21,28 @@ class AuthRepo {
     return await apiClient.postData(
         AppConstants.LOGIN_URI,
         TokenRequest(
-                password: password,
                 username: username,
+                password: password,
                 clientId: "core_client",
                 clientSecret: "secret",
                 grantType: "password")
             .toJson(),
         null);
   }
+  Future<Response> signUp() async {
+    List<Role> list = [Role(4, null, null)];
+    return await apiClient.postData(
+        AppConstants.SIGN_UP, User(
+        null, "flutteda2rere", true, null, false,
+        null, "hihihida2grew", null, "flutter33hihi@gmail.com",
+        "name2", "lastname2", "123456", list, null, 4, null, false
+    ).toJson(),null);
+  }
+
+  Future<bool> logOut() async {
+    return await apiClient.logOut(AppConstants.LOG_OUT);
+  }
+
 
   Future<String> _saveDeviceToken() async {
     String? _deviceToken = '@';

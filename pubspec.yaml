@@ -73,7 +73,7 @@ dev_dependencies:
   phone_number: ^1.0.0
   cached_network_image: ^3.2.2
   photo_view: ^0.14.0
-  image_compression_flutter: ^1.0.2
+  #image_compression_flutter: ^1.0.2
   dotted_border: ^2.0.0+2
   share_plus: ^6.0.1
   flutter_launcher_icons: ^0.11.0
