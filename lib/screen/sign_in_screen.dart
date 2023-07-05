@@ -16,6 +16,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool loading = false;
+  var _showPass = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +65,15 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                         Container(
                           margin: const EdgeInsets.only(top: 20),
-                          child: TextFormField(
+                          child: Obx(()=>TextFormField(
+                            obscureText: _showPass.value,
                             controller: _passwordController,
                             decoration: InputDecoration(
                                 contentPadding: const EdgeInsets.only(left: 28),
+                                suffixIcon: IconButton(
+                                  onPressed: () { _showPass.value = !_showPass.value; },
+                                  icon: Icon(_showPass.value? Icons.visibility : Icons.visibility_off),
+                                ),
                                 border: OutlineInputBorder(
                                   borderSide: const BorderSide(
                                       width: 1,
@@ -77,110 +83,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 hintText: "Password",
                                 hintStyle: const TextStyle(
                                     color: Color.fromRGBO(59, 59, 59, 1))),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(28, 22, 20, 22),
-                          child: const Text(
-                            "Or Continue With",
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                                    boxShadow: [
-                                      BoxShadow(color: Colors.black38,blurRadius: 2,spreadRadius: 0.2)
-                                    ]
-                                ),
-                                margin: const EdgeInsets.only(right: 10),
-                                child: ElevatedButton(
-                                    onPressed: () {},
-                                    style: TextButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(15),
-                                            side: const BorderSide(
-                                                width: 1,
-                                                color: Color.fromRGBO(
-                                                    244, 244, 244, 1))),
-                                        padding: const EdgeInsets.all(0),
-                                        backgroundColor: Colors.white,
-                                        elevation: 0),
-                                    child: Container(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            22, 16, 12, 16),
-                                        child: Row(children: [
-                                          Container(
-                                              alignment: Alignment.center,
-                                              width: 25,
-                                              height: 25,
-                                              margin:
-                                              const EdgeInsets.only(right: 12),
-                                              child: Image.asset(Images.facebook)),
-                                          const Text(
-                                            "Facebook",
-                                            style: TextStyle(color: Colors.black),
-                                          )
-                                        ]))),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                                    boxShadow: [
-                                      BoxShadow(color: Colors.black38,blurRadius: 2,spreadRadius: 0.2)
-                                    ]
-                                ),
-                                margin: const EdgeInsets.only(left: 10),
-                                child: ElevatedButton(
-                                    onPressed: () {},
-                                    style: TextButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(15),
-                                            side: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    244, 244, 244, 1))),
-                                        padding: const EdgeInsets.all(0),
-                                        backgroundColor: Colors.white,
-                                        elevation: 0),
-                                    child: Container(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            22, 16, 12, 16),
-                                        child: Row(children: [
-                                          Container(
-                                              alignment: Alignment.center,
-                                              width: 25,
-                                              height: 25,
-                                              margin:
-                                              const EdgeInsets.only(right: 12),
-                                              child: Image.asset(Images.google)),
-                                          const Text(
-                                            "Google",
-                                            style: TextStyle(color: Colors.black),
-                                          )
-                                        ]))),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(28, 22, 20, 22),
-                          child: const Text(
-                            "Forgot Your Password?",
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
+                          ),)
                         ),
                         Container(
                           margin: const EdgeInsets.only(top: 40),
