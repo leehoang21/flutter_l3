@@ -37,7 +37,7 @@ class ApiClient extends GetxService {
   void updateHeader(
       String token, List<int>? zoneIDs, String? languageCode, int moduleID) {
     Map<String, String> _header = {
-      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/json',
       AppConstants.LOCALIZATION_KEY:
           languageCode ?? AppConstants.languages[0].languageCode,
       'Authorization': '$token'
@@ -72,8 +72,25 @@ class ApiClient extends GetxService {
       }
       Http.Response _response = await Http.post(
         Uri.parse(appBaseUrl + uri),
-        body: body,
+        body: jsonEncode(body),
         headers: headers ?? _mainHeaders,
+      ).timeout(Duration(seconds: timeoutInSeconds));
+      return handleResponse(_response, uri);
+    } catch (e) {
+      return Response(statusCode: 1, statusText: noInternetMessage);
+    }
+  }
+  Future<Response> postDataLogin(String uri, dynamic body,
+      Map<String, String>? headers) async {
+    try {
+      if (Foundation.kDebugMode) {
+        print('====> API Call: $uri\nHeader: $_mainHeaders');
+        print('====> API Body: $body');
+      }
+      Http.Response _response = await Http.post(
+        Uri.parse(appBaseUrl + uri),
+        body: body,
+        headers: headers,
       ).timeout(Duration(seconds: timeoutInSeconds));
       return handleResponse(_response, uri);
     } catch (e) {

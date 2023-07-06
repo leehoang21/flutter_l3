@@ -21,6 +21,7 @@ class AppConstants {
   static const String LOGIN_URI = '/asvn/oauth/token';
   static const String SIGN_UP = '/mita/public/sign';
   static const String LOG_OUT = '/asvn/oauth/logout';
+  static const String GET_USER = '/asvn/api/users/getCurrentUser';
   // Shared Key
   static const String THEME = '6ammart_theme';
   static const String TOKEN = '6ammart_token';

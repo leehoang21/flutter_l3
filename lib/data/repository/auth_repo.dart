@@ -18,7 +18,17 @@ class AuthRepo {
 
   Future<Response> login(
       {required String username, required String password}) async {
-    return await apiClient.postData(
+    //header login
+    var token = "Basic Y29yZV9jbGllbnQ6c2VjcmV0";
+    var languageCode = sharedPreferences.getString(AppConstants.LANGUAGE_CODE);
+    Map<String, String> _header = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      AppConstants.LOCALIZATION_KEY:
+          languageCode ?? AppConstants.languages[0].languageCode,
+      'Authorization': '$token'
+    };
+    //call api login
+    return await apiClient.postDataLogin(
         AppConstants.LOGIN_URI,
         TokenRequest(
                 username: username,
@@ -26,21 +36,15 @@ class AuthRepo {
                 clientId: "core_client",
                 clientSecret: "secret",
                 grantType: "password")
-            .toJson(),
-        null);
-  }
-  Future<Response> signUp() async {
-    List<Role> list = [Role(4, null, null)];
-    return await apiClient.postData(
-        AppConstants.SIGN_UP, User(
-        null, "flutteda2rere", true, null, false,
-        null, "hihihida2grew", null, "flutter33hihi@gmail.com",
-        "name2", "lastname2", "123456", list, null, 4, null, false
-    ).toJson(),null);
+            .toJson(),_header);
   }
 
   Future<Response> logOut() async {
     return await apiClient.deleteData(AppConstants.LOG_OUT);
+  }
+
+  Future<Response> getCurrentUser() async{
+    return await apiClient.getData(AppConstants.GET_USER);
   }
 
 
@@ -61,7 +65,7 @@ class AuthRepo {
   Future<bool> saveUserToken(String token) async {
     apiClient.token = "Bearer $token";
     apiClient.updateHeader("Bearer $token", null,
-        sharedPreferences.getString(AppConstants.LANGUAGE_CODE)!, 0);
+        sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ?? "vi", 0);
     return await sharedPreferences.setString(
         AppConstants.TOKEN, "Bearer $token");
   }
