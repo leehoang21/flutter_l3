@@ -67,7 +67,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                           borderRadius: BorderRadius.circular(15)),
                                       hintText: "Email",
                                       hintStyle: const TextStyle(
-                                          color: Color.fromRGBO(59, 59, 59, 1))),
+                                          color: Colors.grey)),
                                 ),
                               ),
                               Container(
@@ -97,7 +97,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                           hintText: "Password",
                                           hintStyle: const TextStyle(
                                               color:
-                                              Color.fromRGBO(59, 59, 59, 1))),
+                                              Colors.grey)),
                                     ),
                                   )),
                               Container(
