@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:timesheet/controller/auth_controller.dart';
+import 'package:timesheet/screen/home_screen.dart';
+import 'package:timesheet/screen/scan_qr_screen.dart';
 import 'package:timesheet/utils/images.dart';
-
-import '../helper/route_helper.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -144,7 +144,7 @@ class _SignInScreenState extends State<SignInScreen> {
               child: GetBuilder<AuthController>(
                 builder: (controller) {
                   return Visibility(
-                    visible: Get.find<AuthController>().loading,
+                    visible: controller.loading,
                     child: const CircularProgressIndicator(),
                   );
                 },
@@ -165,7 +165,7 @@ class _SignInScreenState extends State<SignInScreen> {
     } else {
       Get.find<AuthController>().login(username, password).then((value) => {
             if (value == 200)
-              {Get.offNamed(RouteHelper.main)}
+              {Get.to(const HomeScreent(),transition: Transition.size,duration: Duration(milliseconds: 500),curve: Curves.easeIn)}
             else if (value == 400)
               {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

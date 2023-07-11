@@ -22,6 +22,7 @@ class AppConstants {
   static const String SIGN_UP = '/mita/public/sign';
   static const String LOG_OUT = '/asvn/oauth/logout';
   static const String GET_USER = '/asvn/api/users/getCurrentUser';
+  static const String GET_ALLOCATION_VOUCHERS = '/asvn/api/v1/instruments-and-tools/allocation-vouchers/page?pageIndex=1&pageSize=10';
   // Shared Key
   static const String THEME = '6ammart_theme';
   static const String TOKEN = '6ammart_token';

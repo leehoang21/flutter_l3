@@ -111,13 +111,16 @@ dev_dependencies:
   #  firebase_app_check: ^0.1.1+2
   flutter_native_splash: ^2.2.13
   flutter_countdown_timer: ^4.1.0
-  qr_flutter: ^4.0.0
   crypto: ^3.0.2
   firebase_storage: ^11.0.6
   cloud_firestore: ^4.1.0
   firebase_crashlytics: ^3.0.2
   firebase_core: ^2.1.0
   firebase_messaging: ^14.0.2
+  qr_flutter: ^4.1.0
+  qr_code_scanner: ^1.0.1
+  google_fonts: ^2.3.3
+  infinite_scroll_pagination: ^3.2.0
 
 flutter_icons:
   android: "launcher_icon"

@@ -53,7 +53,7 @@ class ApiClient extends GetxService {
         print('====> API Call: $uri\nHeader: $_mainHeaders');
       }
       Http.Response _response = await Http.get(
-        Uri.parse(appBaseUrl + uri),
+        Uri.parse(appBaseUrl + uri).replace(queryParameters: query),
         headers: headers ?? _mainHeaders,
       ).timeout(Duration(seconds: timeoutInSeconds));
       return handleResponse(_response, uri);
@@ -96,14 +96,6 @@ class ApiClient extends GetxService {
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);
     }
-  }
-  Future<bool> logOut(String uri) async {
-    final url = Uri.parse(appBaseUrl + uri);
-    final response = await Http.delete(url);
-    if (response.statusCode == 200) {
-      return true;
-    }
-    return false;
   }
   
   Future<Response> postMultipartData(
