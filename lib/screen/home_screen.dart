@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:timesheet/screen/instruments_and_tools_screen.dart';
-
 import '../controller/auth_controller.dart';
 import '../helper/route_helper.dart';
 import '../widgets/drawer.dart';
 import 'start_screen.dart';
-
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:timesheet/screen/home_screen_section_0.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     Get.find<AuthController>().getCurrentUser();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,24 +53,28 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void logOut() {
-    Get.find<AuthController>().logOut().then((value) => {
+    Get.find<AuthController>().logOut().then((value) =>
+    {
       if(value == 200){
         Get.offNamed(RouteHelper.signIn)
       }
-      else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("Đã có lỗi xảy ra vui lòng thử lại")))
-      }
+      else
+        {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Đã có lỗi xảy ra vui lòng thử lại")))
+        }
     });
   }
-  void getUser(){
-    Get.find<AuthController>().getCurrentUser().then((value) => {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("$value")))
-        });
+
+  void getUser() {
+    Get.find<AuthController>().getCurrentUser().then((value) =>
+    {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("$value")))
+    });
   }
 
-  void changePage(String s){
+  void changePage(String s) {
     navigator?.pop(context);
     title.value = s.tr;
     switch (s) {
@@ -79,6 +84,51 @@ class _HomeScreenState extends State<HomeScreen> {
         {
           index.value = 1;
         }
+    }
+    var _currentIndex = 0;
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        body: _currentIndex == 0
+            ? HomeScreenSection0()
+            : _currentIndex == 1
+            ? HomeScreenSection0()
+            : HomeScreenSection0(),
+        bottomNavigationBar: SalomonBottomBar(
+          currentIndex: _currentIndex,
+          onTap: (i) => setState(() => _currentIndex = i),
+          items: [
+
+            /// Home
+            SalomonBottomBarItem(
+              icon: Icon(Icons.home),
+              title: Text("Home"),
+              selectedColor: Colors.purple,
+            ),
+
+            /// Likes
+            SalomonBottomBarItem(
+              icon: Icon(Icons.favorite_border),
+              title: Text("Likes"),
+              selectedColor: Colors.pink,
+            ),
+
+            /// Search
+            SalomonBottomBarItem(
+              icon: Icon(Icons.search),
+              title: Text("Search"),
+              selectedColor: Colors.orange,
+            ),
+
+            /// Profile
+            SalomonBottomBarItem(
+              icon: Icon(Icons.person),
+              title: Text("Profile"),
+              selectedColor: Colors.teal,
+            ),
+          ],
+        ),
+      );
     }
   }
 }

@@ -83,6 +83,7 @@ class RouteHelper {
     GetPage(name: splash, page: () => const SplashScreen()),
     GetPage(name: signIn, page: () => const SignInScreen()),
     GetPage(name: main, page: () => const HomeScreen()),
+
   ];
 
   static getRoute(Widget navigateTo) {

@@ -37,10 +37,10 @@ class ApiClient extends GetxService {
   void updateHeader(
       String token, List<int>? zoneIDs, String? languageCode, int moduleID) {
     Map<String, String> _header = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
       AppConstants.LOCALIZATION_KEY:
           languageCode ?? AppConstants.languages[0].languageCode,
-      'Authorization': '$token'
+      'Authorization': token
     };
     _header.addAll({AppConstants.MODULE_ID: moduleID.toString()});
     _mainHeaders = _header;
@@ -66,14 +66,15 @@ class ApiClient extends GetxService {
   Future<Response> postData(String uri, dynamic body,
       Map<String, String>? headers) async {
     try {
+      String requestBody = jsonEncode(body);
       if (Foundation.kDebugMode) {
         print('====> API Call: $uri\nHeader: $_mainHeaders');
-        print('====> API Body: $body');
+        print('====> API Body: $requestBody');
       }
       Http.Response _response = await Http.post(
         Uri.parse(appBaseUrl + uri),
-        body: jsonEncode(body),
-        headers: headers ?? _mainHeaders,
+        body: body,
+        headers: _mainHeaders,
       ).timeout(Duration(seconds: timeoutInSeconds));
       return handleResponse(_response, uri);
     } catch (e) {
@@ -97,10 +98,10 @@ class ApiClient extends GetxService {
       return Response(statusCode: 1, statusText: noInternetMessage);
     }
   }
-  
+
   Future<Response> postMultipartData(
       String uri, Map<String, String> body, List<MultipartBody> multipartBody,
-      {required Map<String, String> headers}) async {
+      {required Map<String, String>? headers}) async {
     try {
       if (Foundation.kDebugMode) {
         print('====> API Call: $uri\nHeader: $_mainHeaders');
