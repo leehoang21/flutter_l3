@@ -84,7 +84,7 @@ class ApiClient extends GetxService {
       Map<String, String>? headers) async {
     try {
       if (Foundation.kDebugMode) {
-        print('====> API Call: $uri\nHeader: $_mainHeaders');
+        print('====> API Call: $uri\nHeader: ${headers ?? _mainHeaders}');
         print('====> API Body: $body');
       }
       Http.Response _response = await Http.post(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:timesheet/controller/auth_controller.dart';
 import 'package:timesheet/screen/home_screen.dart';
-import 'package:timesheet/screen/scan_qr_screen.dart';
+import 'package:timesheet/screen/scan_qr/scan_qr_screen.dart';
 import 'package:timesheet/utils/images.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -165,7 +165,7 @@ class _SignInScreenState extends State<SignInScreen> {
     } else {
       Get.find<AuthController>().login(username, password).then((value) => {
             if (value == 200)
-              {Get.to(const HomeScreent(),transition: Transition.size,duration: Duration(milliseconds: 500),curve: Curves.easeIn)}
+              {Get.to(const HomeScreen(),transition: Transition.size,duration: Duration(milliseconds: 500),curve: Curves.easeIn)}
             else if (value == 400)
               {
                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

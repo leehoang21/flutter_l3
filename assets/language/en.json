@@ -776,5 +776,8 @@
   "face_scanning_successful": "Face scanning successfully completed !",
   "please_verify_your_kyc_information": "Please verify your information.",
   "scanner": "Scanner",
-  "user_unavailable": "User Unavailable"
+  "user_unavailable": "User Unavailable",
+  "lang_vi": "Vietnamese",
+  "lang_en": "English",
+  "home": "Home"
 }

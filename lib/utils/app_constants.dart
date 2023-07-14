@@ -6,8 +6,7 @@ class AppConstants {
   static const String APP_NAME = 'Base ';
   static const String APP_VERSION = "1.0.0";
 
-  //https://asvn.oceantech.com.vn/asvn/oauth/token
-  static const String BASE_URL = 'https://asvn.oceantech.com.vn';
+  static const String BASE_URL = 'http://android-tracking.oceantech.com.vn';
   static const String CATEGORY_URI = '/api/v1/categories';
   static const String BANNER_URI = '/api/v1/banners';
   static const String STORE_ITEM_URI = '/api/v1/items/latest';
@@ -18,10 +17,10 @@ class AppConstants {
   static const String CATEGORY_ITEM_URI = '/api/v1/categories/items/';
   static const String CATEGORY_STORE_URI = '/api/v1/categories/stores/';
   static const String CONFIG_URI = '/mita/public/config-app';
-  static const String LOGIN_URI = '/asvn/oauth/token';
+  static const String LOGIN_URI = '/mita/oauth/token';
   static const String SIGN_UP = '/mita/public/sign';
-  static const String LOG_OUT = '/asvn/oauth/logout';
-  static const String GET_USER = '/asvn/api/users/getCurrentUser';
+  static const String LOG_OUT = '/mita/oauth/logout';
+  static const String GET_USER = '/mita/users/get-user-current';
   static const String GET_ALLOCATION_VOUCHERS = '/asvn/api/v1/instruments-and-tools/allocation-vouchers/page?pageIndex=1&pageSize=10';
   // Shared Key
   static const String THEME = '6ammart_theme';

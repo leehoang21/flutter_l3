@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:timesheet/widgets/item_list_tile.dart';
-import '../controller/auth_controller.dart';
+import 'package:timesheet/controller/localization_controller.dart';
 
-class CustomDrawer extends StatefulWidget{
+import '../controller/auth_controller.dart';
+import '../utils/app_constants.dart';
+
+class CustomDrawer extends StatefulWidget {
   final VoidCallback logOut;
   final void Function(String) changePage;
-  const CustomDrawer({super.key, required this.logOut, required this.changePage});
+
+  const CustomDrawer(
+      {super.key, required this.logOut, required this.changePage});
+
   @override
   State<StatefulWidget> createState() => DrawerState();
 }
+
 class DrawerState extends State<CustomDrawer>{
   DrawerState();
-  var showCCDC = false.obs;
-  var showShopping = false.obs;
+
+  // var showCCDC = false.obs;
+  // var showShopping = false.obs;
+  List<String> _langs = ["lang_vi", "lang_en"];
+  var _lang = "lang_vi".obs;
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -22,9 +32,7 @@ class DrawerState extends State<CustomDrawer>{
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            decoration: const BoxDecoration(
-                color: Color(0xff5f62a1)
-            ),
+            decoration: const BoxDecoration(color: Color(0xff5f62a1)),
             child: Column(
               children: [
                 Align(
@@ -62,75 +70,116 @@ class DrawerState extends State<CustomDrawer>{
             ),
           ),
           ListTile(
-
-            leading: const Icon(Icons.grid_view_rounded,color: Colors.white,),
-            title: const Text('Trang chủ',style: TextStyle(color: Colors.white),),
+            leading: const Icon(
+              Icons.grid_view_rounded,
+              color: Colors.white,
+            ),
+            title: Text(
+              'home'.tr,
+              style: const TextStyle(color: Colors.white),
+            ),
             onTap: () {
-              // Xử lý khi người dùng chọn mục trong drawer
-              widget.changePage("Trang chủ");
+              widget.changePage('home');
             },
           ),
-          ExpansionTile(
-            onExpansionChanged: (isExpand){
-              showShopping.value = isExpand;
-            },
-            title: const Text('Quản lý mua sắm',style: TextStyle(color: Colors.white),),
-            leading: const Icon(Icons.text_snippet,color: Colors.white,),
-            trailing: Obx(() => showShopping.value ? const Icon(Icons.arrow_drop_down_outlined,size: 30,color: Colors.white,): const Icon(Icons.arrow_right_outlined,size: 30,color: Colors.white,),),
-            children: [
-              Container(
-                color: const Color(0xff5f62a1),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: ListTile(
-                    leading: const Icon(Icons.square,color: Colors.white,size: 20,),
-                    title: const Text('Mua sắm tài sản',style: TextStyle(color: Colors.white),),
-                    onTap: () {
-                      // Xử lý khi người dùng chọn mục trong drawer
+          // ExpansionTile(
+          //   onExpansionChanged: (isExpand){
+          //     showCCDC.value = isExpand;
+          //   },
+          //   leading: const Icon(Icons.credit_card_rounded,color: Colors.white,),
+          //   title: const Text('Quản lý CCDC',style: TextStyle(color: Colors.white),),
+          //   trailing: Obx(() => showCCDC.value ? const Icon(Icons.arrow_drop_down_outlined,size: 30,color: Colors.white,): const Icon(Icons.arrow_right_outlined,size: 30,color: Colors.white,),),
+          //   children: [
+          //     Container(
+          //       color: const Color(0xff5f62a1),
+          //       child: ListView.builder(
+          //         itemBuilder: (context, index) {
+          //           return ItemListTile(
+          //             title: listCCDC()[index],
+          //             index: index,
+          //             onClickItem: () {
+          //               onItemClick(listCCDC()[index]);
+          //             },
+          //           );
+          //         },
+          //         itemCount: listCCDC().length,
+          //         shrinkWrap: true,
+          //         scrollDirection: Axis.vertical,
+          //         padding: const EdgeInsets.only(top: 0),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          // Container(height: 1,color: Colors.black),
+          ListTile(
+            title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GetBuilder<LocalizationController>(
+                    builder: (controller) {
+                      return Text(
+                          controller.locale.languageCode == 'vi'
+                              ? 'lang_vi'.tr
+                              : 'lang_en'.tr,
+                          style: const TextStyle(color: Colors.white));
                     },
                   ),
-                ),
-              ),
-            ],
-          ),
-          ExpansionTile(
-            onExpansionChanged: (isExpand){
-              showCCDC.value = isExpand;
-            },
-            leading: const Icon(Icons.credit_card_rounded,color: Colors.white,),
-            title: const Text('Quản lý CCDC',style: TextStyle(color: Colors.white),),
-            trailing: Obx(() => showCCDC.value ? const Icon(Icons.arrow_drop_down_outlined,size: 30,color: Colors.white,): const Icon(Icons.arrow_right_outlined,size: 30,color: Colors.white,),),
-            children: [
-              Container(
-                color: const Color(0xff5f62a1),
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    return ItemListTile(
-                      title: listCCDC()[index],
-                      index: index,
-                      onClickItem: () {
-                        onItemClick(listCCDC()[index]);
+                  const Icon(Icons.arrow_drop_down, color: Colors.white)
+                ]),
+            leading: const Icon(
+              Icons.language,
+              color: Colors.white,
+            ),
+            onTap: () {
+              _showPopupMenu(
+                  (index) => {
+                        Get.find<LocalizationController>().setLanguage(Locale(
+                          AppConstants.languages[index].languageCode,
+                          AppConstants.languages[index].countryCode,
+                        ))
                       },
-                    );
-                  },
-                  itemCount: listCCDC().length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  padding: const EdgeInsets.only(top: 0),
-                ),
-              ),
-            ],
+                  this.context);
+            },
           ),
           ListTile(
-            title: const Text('Đăng xuất',style: TextStyle(color: Colors.white),),
-            leading: const Icon(Icons.exit_to_app,color: Colors.white,),
+            title: Text(
+              'terms'.tr,
+              style: TextStyle(color: Colors.white),
+            ),
+            leading: const Icon(
+              Icons.policy,
+              color: Colors.white,
+            ),
+            onTap: () {},
+          ),
+          ListTile(
+            title: Text(
+              'information'.tr,
+              style: TextStyle(color: Colors.white),
+            ),
+            leading: const Icon(
+              Icons.info,
+              color: Colors.white,
+            ),
+            onTap: () {},
+          ),
+          ListTile(
+            title: Text(
+              'logout'.tr,
+              style: TextStyle(color: Colors.white),
+            ),
+            leading: const Icon(
+              Icons.exit_to_app,
+              color: Colors.white,
+            ),
             onTap: widget.logOut,
-          )
+          ),
         ],
       ),
     );
   }
-  List<String> listCCDC(){
+
+  List<String> listCCDC() {
     return [
       'Danh sách CCDC',
       'Cấp phát CCDC',
@@ -140,7 +189,28 @@ class DrawerState extends State<CustomDrawer>{
       'CCDC chuyển đi'
     ];
   }
-  void onItemClick(String title){
-    widget.changePage(title);
+
+  void onItemClick(String index) {
+    widget.changePage(index);
+  }
+
+  void _showPopupMenu(Function(int) onTap, BuildContext context) async {
+    await showMenu(
+      context: context,
+      position: const RelativeRect.fromLTRB(120, 260, 100, 100),
+      items: [
+        PopupMenuItem(
+          value: 'lang_vi',
+          onTap: () => onTap(0),
+          child: Text('lang_vi'.tr),
+        ),
+        PopupMenuItem(
+          value: 'lang_en',
+          onTap: () => onTap(1),
+          child: Text("lang_en".tr),
+        ),
+      ],
+      elevation: 8.0,
+    );
   }
 }

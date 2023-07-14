@@ -45,7 +45,7 @@ class AuthController extends GetxController implements GetxService {
     update();
     return response.statusCode!;
   }
-  Future<int> getUser() async {
+  Future<int> getCurrentUser() async {
     Response response = await repo.getCurrentUser();
     if(response.statusCode == 200){
       _user = User.fromJson(response.body);

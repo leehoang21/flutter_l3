@@ -999,5 +999,8 @@
   "enter_minimum_delivery_time": "Nhập thời gian giao hàng tối thiểu",
   "enter_maximum_delivery_time": "Nhập thời gian giao hàng tối đa",
   "select_delivery_time_type": "Chọn loại thời gian giao hàng",
-  "customer_not_found": "Không tìm thấy khách hàng"
+  "customer_not_found": "Không tìm thấy khách hàng",
+  "lang_vi": "Tiếng Việt",
+  "lang_en": "Tiếng Anh",
+  "home": "Trang chủ"
 }

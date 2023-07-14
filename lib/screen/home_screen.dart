@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:timesheet/screen/instruments_and_tools_screen.dart';
+
 import '../controller/auth_controller.dart';
 import '../helper/route_helper.dart';
 import '../widgets/drawer.dart';
 import 'start_screen.dart';
 
-class HomeScreent extends StatefulWidget {
-  const HomeScreent({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreent> createState() => _HomeScreentState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreentState extends State<HomeScreent> {
+class _HomeScreenState extends State<HomeScreen> {
   List<Widget> listWidget = [
     const StartScreen(),
     const InstrumentAndTool(),
@@ -21,12 +22,12 @@ class _HomeScreentState extends State<HomeScreent> {
   ];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var index = 0.obs;
-  var title = "Trang chủ".obs;
+  var title = "home".obs;
 
   @override
   void initState() {
     super.initState();
-    Get.find<AuthController>().getUser();
+    Get.find<AuthController>().getCurrentUser();
   }
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,10 @@ class _HomeScreentState extends State<HomeScreent> {
         ),
       ),
       body: Obx(() => listWidget[index.value]),
-      drawer: CustomDrawer(logOut: logOut,changePage: changePage,),
+      drawer: CustomDrawer(
+        logOut: logOut,
+        changePage: (p0) => changePage(p0),
+      ),
     );
   }
 
@@ -59,20 +63,22 @@ class _HomeScreentState extends State<HomeScreent> {
     });
   }
   void getUser(){
-    Get.find<AuthController>().getUser().then((value) => {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("$value")))
-    });
+    Get.find<AuthController>().getCurrentUser().then((value) => {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("$value")))
+        });
   }
 
   void changePage(String s){
     navigator?.pop(context);
-    title.value = s;
-    switch(s){
-      case "Trang chủ" : index.value = 0;
-      case "Cấp phát CCDC":{
-        index.value = 1;
-      }
+    title.value = s.tr;
+    switch (s) {
+      case "home":
+        index.value = 0;
+      case "Cấp phát CCDC":
+        {
+          index.value = 1;
+        }
     }
   }
 }
