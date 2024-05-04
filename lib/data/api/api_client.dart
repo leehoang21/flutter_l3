@@ -167,7 +167,7 @@ class ApiClient extends GetxService {
   Response handleResponse(Http.Response response, String uri) {
     dynamic body;
     try {
-      body = jsonDecode(response.body);
+      body = jsonDecode(utf8.decode(response.bodyBytes));
     } catch (e) {}
     Response response0 = Response(
       body: body ?? response.body,
