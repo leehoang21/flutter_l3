@@ -19,21 +19,21 @@ class NoInternetScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(Images.no_internet, width: 150, height: 150),
+            Image.asset(Images.noInternet, width: 150, height: 150),
             Text('oops'.tr, style: robotoBold.copyWith(
               fontSize: 30,
-              color: Theme.of(context).textTheme.bodyText1!.color,
+              color: Theme.of(context).textTheme.bodyLarge!.color,
             )),
-            SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+            const SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
             Text(
               'no_internet_connection'.tr,
               textAlign: TextAlign.center,
               style: robotoRegular,
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Container(
               height: 45,
-              margin: EdgeInsets.symmetric(horizontal: 40),
+              margin: const EdgeInsets.symmetric(horizontal: 40),
               child: CustomButton(
                 onPressed: () async {
                   if(await Connectivity().checkConnectivity() != ConnectivityResult.none) {

@@ -95,7 +95,7 @@ class AuthRepo {
       await sharedPreferences.setString(
           AppConstants.USER_COUNTRY_CODE, countryCode);
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 
@@ -105,7 +105,7 @@ class AuthRepo {
       await sharedPreferences.setString(
           AppConstants.USER_COUNTRY_CODE, countryCode);
     } catch (e) {
-      throw e;
+      rethrow;
     }
   }
 

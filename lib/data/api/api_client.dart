@@ -36,14 +36,14 @@ class ApiClient extends GetxService {
 
   void updateHeader(
       String token, List<int>? zoneIDs, String? languageCode, int moduleID) {
-    Map<String, String> _header = {
+    Map<String, String> header = {
       'Content-Type': 'application/json; charset=utf-8',
       AppConstants.LOCALIZATION_KEY:
           languageCode ?? AppConstants.languages[0].languageCode,
       'Authorization': token
     };
-    _header.addAll({AppConstants.MODULE_ID: moduleID.toString()});
-    _mainHeaders = _header;
+    header.addAll({AppConstants.MODULE_ID: moduleID.toString()});
+    _mainHeaders = header;
   }
 
   Future<Response> getData(String uri,
@@ -52,11 +52,11 @@ class ApiClient extends GetxService {
       if (Foundation.kDebugMode) {
         print('====> API Call: $uri\nHeader: $_mainHeaders');
       }
-      Http.Response _response = await Http.get(
+      Http.Response response = await Http.get(
         Uri.parse(appBaseUrl + uri).replace(queryParameters: query),
         headers: headers ?? _mainHeaders,
       ).timeout(Duration(seconds: timeoutInSeconds));
-      return handleResponse(_response, uri);
+      return handleResponse(response, uri);
     } catch (e) {
       print('------------${e.toString()}');
       return Response(statusCode: 1, statusText: noInternetMessage);
@@ -71,12 +71,12 @@ class ApiClient extends GetxService {
         print('====> API Call: $uri\nHeader: $_mainHeaders');
         print('====> API Body: $requestBody');
       }
-      Http.Response _response = await Http.post(
+      Http.Response response = await Http.post(
         Uri.parse(appBaseUrl + uri),
         body: body,
         headers: _mainHeaders,
       ).timeout(Duration(seconds: timeoutInSeconds));
-      return handleResponse(_response, uri);
+      return handleResponse(response, uri);
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);
     }
@@ -88,12 +88,12 @@ class ApiClient extends GetxService {
         print('====> API Call: $uri\nHeader: ${headers ?? _mainHeaders}');
         print('====> API Body: $body');
       }
-      Http.Response _response = await Http.post(
+      Http.Response response = await Http.post(
         Uri.parse(appBaseUrl + uri),
         body: body,
         headers: headers,
       ).timeout(Duration(seconds: timeoutInSeconds));
-      return handleResponse(_response, uri);
+      return handleResponse(response, uri);
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);
     }
@@ -107,24 +107,24 @@ class ApiClient extends GetxService {
         print('====> API Call: $uri\nHeader: $_mainHeaders');
         print('====> API Body: $body with ${multipartBody.length} picture');
       }
-      Http.MultipartRequest _request =
+      Http.MultipartRequest request =
           Http.MultipartRequest('POST', Uri.parse(appBaseUrl + uri));
-      _request.headers.addAll(headers ?? _mainHeaders);
+      request.headers.addAll(headers ?? _mainHeaders);
       for (MultipartBody multipart in multipartBody) {
         if (multipart.file != null) {
-          Uint8List _list = await multipart.file.readAsBytes();
-          _request.files.add(Http.MultipartFile(
+          Uint8List list = await multipart.file.readAsBytes();
+          request.files.add(Http.MultipartFile(
             multipart.key,
             multipart.file.readAsBytes().asStream(),
-            _list.length,
+            list.length,
             filename: '${DateTime.now().toString()}.png',
           ));
         }
       }
-      _request.fields.addAll(body);
-      Http.Response _response =
-          await Http.Response.fromStream(await _request.send());
-      return handleResponse(_response, uri);
+      request.fields.addAll(body);
+      Http.Response response =
+          await Http.Response.fromStream(await request.send());
+      return handleResponse(response, uri);
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);
     }
@@ -137,12 +137,12 @@ class ApiClient extends GetxService {
         print('====> API Call: $uri\nHeader: $_mainHeaders');
         print('====> API Body: $body');
       }
-      Http.Response _response = await Http.put(
+      Http.Response response = await Http.put(
         Uri.parse(appBaseUrl + uri),
         body: jsonEncode(body),
         headers: headers ?? _mainHeaders,
       ).timeout(Duration(seconds: timeoutInSeconds));
-      return handleResponse(_response, uri);
+      return handleResponse(response, uri);
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);
     }
@@ -154,23 +154,23 @@ class ApiClient extends GetxService {
       if (Foundation.kDebugMode) {
         print('====> API Call: $uri\nHeader: $_mainHeaders');
       }
-      Http.Response _response = await Http.delete(
+      Http.Response response = await Http.delete(
         Uri.parse(appBaseUrl + uri),
         headers: headers ?? _mainHeaders,
       ).timeout(Duration(seconds: timeoutInSeconds));
-      return handleResponse(_response, uri);
+      return handleResponse(response, uri);
     } catch (e) {
       return Response(statusCode: 1, statusText: noInternetMessage);
     }
   }
 
   Response handleResponse(Http.Response response, String uri) {
-    dynamic _body;
+    dynamic body;
     try {
-      _body = jsonDecode(response.body);
+      body = jsonDecode(response.body);
     } catch (e) {}
-    Response _response = Response(
-      body: _body ?? response.body,
+    Response response0 = Response(
+      body: body ?? response.body,
       bodyString: response.body.toString(),
       request: Request(
           headers: response.request!.headers,
@@ -180,29 +180,29 @@ class ApiClient extends GetxService {
       statusCode: response.statusCode,
       statusText: response.reasonPhrase,
     );
-    if (_response.statusCode != 200 &&
-        _response.body != null &&
-        _response.body is! String) {
-      if (_response.body.toString().startsWith('{errors: [{code:')) {
-        ErrorResponse _errorResponse = ErrorResponse.fromJson(_response.body);
-        _response = Response(
-            statusCode: _response.statusCode,
-            body: _response.body,
-            statusText: _errorResponse.errors![0].message);
-      } else if (_response.body.toString().startsWith('{message')) {
-        _response = Response(
-            statusCode: _response.statusCode,
-            body: _response.body,
-            statusText: _response.body['message']);
+    if (response0.statusCode != 200 &&
+        response0.body != null &&
+        response0.body is! String) {
+      if (response0.body.toString().startsWith('{errors: [{code:')) {
+        ErrorResponse errorResponse = ErrorResponse.fromJson(response0.body);
+        response0 = Response(
+            statusCode: response0.statusCode,
+            body: response0.body,
+            statusText: errorResponse.errors![0].message);
+      } else if (response0.body.toString().startsWith('{message')) {
+        response0 = Response(
+            statusCode: response0.statusCode,
+            body: response0.body,
+            statusText: response0.body['message']);
       }
-    } else if (_response.statusCode != 200 && _response.body == null) {
-      _response = Response(statusCode: 0, statusText: noInternetMessage);
+    } else if (response0.statusCode != 200 && response0.body == null) {
+      response0 = Response(statusCode: 0, statusText: noInternetMessage);
     }
     if (Foundation.kDebugMode) {
       print(
-          '====> API Response: [${_response.statusCode}] $uri\n${_response.body}');
+          '====> API Response: [${response0.statusCode}] $uri\n${response0.body}');
     }
-    return _response;
+    return response0;
   }
 }
 

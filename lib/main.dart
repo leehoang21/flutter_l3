@@ -34,18 +34,18 @@ Future<void> main() async {
   }
 
   setPathUrlStrategy();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  try {
-    if (GetPlatform.isMobile) {
-      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-          FlutterLocalNotificationsPlugin();
-      await NotificationHelper.initialize(flutterLocalNotificationsPlugin);
-      FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
-    }
-  } catch (e) {}
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+  //
+  // try {
+  //   if (GetPlatform.isMobile) {
+  //     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  //         FlutterLocalNotificationsPlugin();
+  //     await NotificationHelper.initialize(flutterLocalNotificationsPlugin);
+  //     FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
+  //   }
+  // } catch (e) {}
 
   Map<String, Map<String, String>> _languages = await di.init();
 

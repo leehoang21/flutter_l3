@@ -21,13 +21,7 @@ class NotificationHelper {
         onDidReceiveNotificationResponse:
             (NotificationResponse notificationResponse) async {
       try {
-        if (notificationResponse.payload != null &&
-            notificationResponse.payload!.isNotEmpty) {
-          Get.toNamed(RouteHelper.getOrderDetailsRoute(
-              int.parse(notificationResponse.payload!)));
-        } else {
-          Get.toNamed(RouteHelper.getNotificationRoute());
-        }
+
       } catch (e) {}
       return;
     });
@@ -47,13 +41,7 @@ class NotificationHelper {
       print(
           "onOpenApp: ${message.notification?.title}/${message.notification?.body}/${message.notification?.titleLocKey}");
       try {
-        if (message.notification?.titleLocKey != null &&
-            message.notification!.titleLocKey!.isNotEmpty) {
-          Get.toNamed(RouteHelper.getOrderDetailsRoute(
-              int.parse(message.notification!.titleLocKey!)));
-        } else {
-          Get.toNamed(RouteHelper.getNotificationRoute());
-        }
+
       } catch (e) {}
     });
   }
@@ -61,33 +49,33 @@ class NotificationHelper {
   static Future<void> showNotification(RemoteMessage message,
       FlutterLocalNotificationsPlugin fln, bool data) async {
     if (!GetPlatform.isIOS) {
-      String? _title;
-      String? _body;
-      String? _orderID;
-      String? _image;
+      String? title;
+      String? body;
+      String? orderID;
+      String? image;
       if (data) {
-        _title = message.data['title'];
-        _body = message.data['body'];
-        _orderID = message.data['order_id'];
-        _image = (message.data['image'] != null &&
+        title = message.data['title'];
+        body = message.data['body'];
+        orderID = message.data['order_id'];
+        image = (message.data['image'] != null &&
                 message.data['image'].isNotEmpty)
             ? message.data['image'].startsWith('http')
                 ? message.data['image']
                 : '${AppConstants.BASE_URL}/storage/app/public/notification/${message.data['image']}'
             : null;
       } else {
-        _title = message.notification?.title;
-        _body = message.notification?.body;
-        _orderID = message.notification?.titleLocKey;
+        title = message.notification?.title;
+        body = message.notification?.body;
+        orderID = message.notification?.titleLocKey;
         if (GetPlatform.isAndroid) {
-          _image = (message.notification?.android?.imageUrl != null &&
+          image = (message.notification?.android?.imageUrl != null &&
                   message.notification!.android!.imageUrl!.isNotEmpty)
               ? message.notification!.android!.imageUrl!.startsWith('http')
                   ? message.notification!.android!.imageUrl
                   : '${AppConstants.BASE_URL}/storage/app/public/notification/${message.notification!.android!.imageUrl}'
               : null;
         } else if (GetPlatform.isIOS) {
-          _image = (message.notification!.apple!.imageUrl != null &&
+          image = (message.notification!.apple!.imageUrl != null &&
                   message.notification!.apple!.imageUrl!.isNotEmpty)
               ? message.notification!.apple!.imageUrl!.startsWith('http')
                   ? message.notification!.apple!.imageUrl
@@ -96,15 +84,15 @@ class NotificationHelper {
         }
       }
 
-      if (_image != null && _image.isNotEmpty) {
+      if (image != null && image.isNotEmpty) {
         try {
           await showBigPictureNotificationHiddenLargeIcon(
-              _title!, _body!, _orderID!, _image, fln);
+              title!, body!, orderID!, image, fln);
         } catch (e) {
-          await showBigTextNotification(_title!, _body!, _orderID!, fln);
+          await showBigTextNotification(title!, body!, orderID!, fln);
         }
       } else {
-        await showBigTextNotification(_title!, _body!, _orderID!, fln);
+        await showBigTextNotification(title!, body!, orderID!, fln);
       }
     }
   }

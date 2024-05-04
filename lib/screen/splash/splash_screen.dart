@@ -1,16 +1,14 @@
 import 'dart:async';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:timesheet/controller/auth_controller.dart';
-import 'package:timesheet/screen/home_screen.dart';
-
 import '../../controller/splash_controller.dart';
 import '../../helper/route_helper.dart';
 import '../../utils/dimensions.dart';
 import '../../utils/images.dart';
 import '../../view/no_internet_screen.dart';
+import '../home/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -20,21 +18,20 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  GlobalKey<ScaffoldState> _globalKey = GlobalKey();
   late StreamSubscription<ConnectivityResult> _onConnectivityChanged;
 
   @override
   void initState() {
     super.initState();
-    bool _firstTime = true;
+    bool firstTime = true;
     _onConnectivityChanged = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
-      if (!_firstTime) {
+      if (!firstTime) {
         bool isNotConnected = result != ConnectivityResult.wifi &&
             result != ConnectivityResult.mobile;
         isNotConnected
-            ? SizedBox()
+            ? const SizedBox()
             : ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           backgroundColor: isNotConnected ? Colors.red : Colors.green,
@@ -48,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
           _route();
         }
       }
-      _firstTime = false;
+      firstTime = false;
     });
     _route();
   }
@@ -68,7 +65,6 @@ class _SplashScreenState extends State<SplashScreen> {
                     children: [
                       Image.asset(Images.logo, width: 200),
                       const SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                      // Text(AppConstants.APP_NAME, style: robotoMedium.copyWith(fontSize: 25)),
                     ],
                   )
                 : NoInternetScreen(child: const SplashScreen()),
@@ -82,10 +78,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Get.find<AuthController>().getCurrentUser().then((value) => {
           if (value == 200)
             {
-              Get.to(const HomeScreen(),
-                  transition: Transition.size,
-                  duration: Duration(milliseconds: 500),
-                  curve: Curves.easeIn)
+              Get.to(const HomeScreen(),)
             }
           else
             {Get.offNamed(RouteHelper.signIn)}

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:timesheet/controller/auth_controller.dart';
-import 'package:timesheet/screen/home_screen.dart';
-import 'package:timesheet/screen/scan_qr/scan_qr_screen.dart';
 import 'package:timesheet/utils/images.dart';
+
+import '../home/home_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);

@@ -10,8 +10,8 @@ class ConfigResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['versionName'] = versionName;
-    return _data;
+    final data = <String, dynamic>{};
+    data['versionName'] = versionName;
+    return data;
   }
 }
