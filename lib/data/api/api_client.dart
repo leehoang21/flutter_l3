@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/app_constants.dart';
 import '../model/error_response.dart';
@@ -18,6 +19,9 @@ class ApiClient extends GetxService {
 
   String token = "";
   Map<String, String> _mainHeaders = {};
+  var logger = Logger(
+    printer: PrettyPrinter(methodCount: 0,),
+  );
 
   ApiClient({required this.appBaseUrl, required this.sharedPreferences}) {
     token = sharedPreferences.getString(AppConstants.TOKEN) ??
@@ -49,7 +53,7 @@ class ApiClient extends GetxService {
       {Map<String, dynamic>? query, Map<String, String>? headers}) async {
     try {
       if (foundation.kDebugMode) {
-        log('====> API Call: $uri\nHeader: $_mainHeaders');
+        logger.i('Get Request: ${appBaseUrl + uri}\nHeader: ${headers ?? _mainHeaders}');
       }
       http.Response response = await http.get(
         Uri.parse(appBaseUrl + uri).replace(queryParameters: query),
@@ -57,7 +61,7 @@ class ApiClient extends GetxService {
       ).timeout(Duration(seconds: timeoutInSeconds));
       return handleResponse(response, uri);
     } catch (e) {
-      log('------------${e.toString()}');
+      logger.e('Error: ${e.toString()}');
       return Response(statusCode: 1, statusText: noInternetMessage);
     }
   }
@@ -65,10 +69,8 @@ class ApiClient extends GetxService {
   Future<Response> postData(String uri, dynamic body,
       Map<String, String>? headers) async {
     try {
-      String requestBody = jsonEncode(body);
       if (foundation.kDebugMode) {
-        log('====> API Call: $uri\nHeader: $_mainHeaders');
-        log('====> API Body: $requestBody');
+        logger.i('Post Request: ${appBaseUrl + uri}\nHeader: ${headers ?? _mainHeaders}\nAPI Body: $body');
       }
       http.Response response = await http.post(
         Uri.parse(appBaseUrl + uri),
@@ -77,6 +79,7 @@ class ApiClient extends GetxService {
       ).timeout(Duration(seconds: timeoutInSeconds));
       return handleResponse(response, uri);
     } catch (e) {
+      logger.e('Error: ${e.toString()}');
       return Response(statusCode: 1, statusText: noInternetMessage);
     }
   }
@@ -84,8 +87,7 @@ class ApiClient extends GetxService {
       Map<String, String>? headers) async {
     try {
       if (foundation.kDebugMode) {
-        log('====> API Call: $uri\nHeader: ${headers ?? _mainHeaders}');
-        log('====> API Body: $body');
+        logger.i('Post Request: ${appBaseUrl + uri}\nHeader: ${headers ?? _mainHeaders}\nAPI Body: $body');
       }
       http.Response response = await http.post(
         Uri.parse(appBaseUrl + uri),
@@ -94,6 +96,7 @@ class ApiClient extends GetxService {
       ).timeout(Duration(seconds: timeoutInSeconds));
       return handleResponse(response, uri);
     } catch (e) {
+      logger.e('Error: ${e.toString()}');
       return Response(statusCode: 1, statusText: noInternetMessage);
     }
   }
@@ -103,8 +106,7 @@ class ApiClient extends GetxService {
       {required Map<String, String>? headers}) async {
     try {
       if (foundation.kDebugMode) {
-        log('====> API Call: $uri\nHeader: $_mainHeaders');
-        log('====> API Body: $body with ${multipartBody.length} picture');
+        logger.i('Post Multipart Request: $uri\nHeader: ${headers ?? _mainHeaders}\nAPI Body: $body with ${multipartBody.length} picture');
       }
       http.MultipartRequest request =
           http.MultipartRequest('POST', Uri.parse(appBaseUrl + uri));
@@ -123,6 +125,7 @@ class ApiClient extends GetxService {
           await http.Response.fromStream(await request.send());
       return handleResponse(response, uri);
     } catch (e) {
+      logger.e('Error: ${e.toString()}');
       return Response(statusCode: 1, statusText: noInternetMessage);
     }
   }
@@ -131,8 +134,7 @@ class ApiClient extends GetxService {
       {Map<String, String>? headers}) async {
     try {
       if (foundation.kDebugMode) {
-        log('====> API Call: $uri\nHeader: $_mainHeaders');
-        log('====> API Body: $body');
+        logger.i('Put Request: ${appBaseUrl + uri}\nHeader: ${headers ?? _mainHeaders}\nAPI Body: $body');
       }
       http.Response response = await http.put(
         Uri.parse(appBaseUrl + uri),
@@ -141,6 +143,7 @@ class ApiClient extends GetxService {
       ).timeout(Duration(seconds: timeoutInSeconds));
       return handleResponse(response, uri);
     } catch (e) {
+      logger.e('Error: ${e.toString()}');
       return Response(statusCode: 1, statusText: noInternetMessage);
     }
   }
@@ -149,7 +152,7 @@ class ApiClient extends GetxService {
       {Map<String, String>? headers}) async {
     try {
       if (foundation.kDebugMode) {
-        log('====> API Call: $uri\nHeader: $_mainHeaders');
+        logger.i('Delete Request: ${appBaseUrl + uri}\nHeader: ${headers ?? _mainHeaders}');
       }
       http.Response response = await http.delete(
         Uri.parse(appBaseUrl + uri),
@@ -157,6 +160,7 @@ class ApiClient extends GetxService {
       ).timeout(Duration(seconds: timeoutInSeconds));
       return handleResponse(response, uri);
     } catch (e) {
+      logger.e('Error: ${e.toString()}');
       return Response(statusCode: 1, statusText: noInternetMessage);
     }
   }
@@ -198,8 +202,7 @@ class ApiClient extends GetxService {
       response0 = Response(statusCode: 0, statusText: noInternetMessage);
     }
     if (foundation.kDebugMode) {
-      (
-          '====> API Response: [${response0.statusCode}] $uri\n${response0.body}');
+      logger.i('API Response: [${response0.statusCode}] $uri\n${response0.body}');
     }
     return response0;
   }
