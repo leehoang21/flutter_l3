@@ -1,4 +1,3 @@
-
 import 'package:get/get.dart';
 import 'package:timesheet/data/api/api_checker.dart';
 import 'package:timesheet/data/model/body/user.dart';
@@ -24,39 +23,55 @@ class AuthController extends GetxController implements GetxService {
     if (response.statusCode == 200) {
       TokenResponsive tokeBody = TokenResponsive.fromJson(response.body);
       repo.saveUserToken(tokeBody.accessToken!);
-    }
-    else {
+    } else {
       ApiChecker.checkApi(response);
     }
     _loading = false;
     update();
     return response.statusCode!;
   }
+
+  Future<int> register(User user) async {
+    _loading = true;
+    update();
+    Response response = await repo.register(user: user);
+    if (response.statusCode == 200) {
+      TokenResponsive tokeBody = TokenResponsive.fromJson(response.body);
+      repo.saveUserToken(tokeBody.accessToken!);
+    } else {
+      ApiChecker.checkApi(response);
+    }
+    _loading = false;
+    update();
+    return response.statusCode!;
+  }
+
   Future<int> logOut() async {
     _loading = true;
     Response response = await repo.logOut();
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       repo.clearUserToken();
-    }
-    else {
+    } else {
       ApiChecker.checkApi(response);
     }
     _loading = false;
     update();
     return response.statusCode!;
   }
+
   Future<int> getCurrentUser() async {
     Response response = await repo.getCurrentUser();
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       _user = User.fromJson(response.body);
       update();
-    }
-    else {
+    } else {
       ApiChecker.checkApi(response);
     }
-    return response.statusCode!;
+    return 0;
+    // return response.statusCode!;
   }
-  void clearData(){
+
+  void clearData() {
     _loading = false;
     _user = User();
   }

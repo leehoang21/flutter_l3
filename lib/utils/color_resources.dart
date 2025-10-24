@@ -1,9 +1,11 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ColorResources {
   static Color getPrimaryColor() {
-    return Get.isDarkMode ? Colors.green :  const Color(0xFF039D55);
+    return Get.isDarkMode ? Colors.green : const Color(0xFF039D55);
   }
 
   static Color getPrimaryTextColor() {
@@ -59,7 +61,9 @@ class ColorResources {
   }
 
   static Color getLightAndDark() {
-    return Get.isDarkMode ? Theme.of(Get.context!).cardColor : const Color(0xFF000000);
+    return Get.isDarkMode
+        ? Theme.of(Get.context!).cardColor
+        : const Color(0xFF000000);
   }
 
   static Color getOccupationCardColor() {

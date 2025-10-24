@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:timesheet/screen/main/main_screen.dart';
+import 'package:timesheet/screen/register/register_screen.dart';
 import 'package:timesheet/screen/sign_in/sign_in_screen.dart';
-import '../screen/home/home_screen.dart';
 import '../screen/splash/splash_screen.dart';
 
 class RouteHelper {
@@ -10,7 +11,7 @@ class RouteHelper {
   static const String language = '/language';
   static const String signIn = '/sign-in';
   static const String signUp = '/sign-up';
-  static const String home = '/home';
+  static const String main = '/main';
 
   static String getInitialRoute() => initial;
 
@@ -25,8 +26,8 @@ class RouteHelper {
   static List<GetPage> routes = [
     GetPage(name: splash, page: () => const SplashScreen()),
     GetPage(name: signIn, page: () => const SignInScreen()),
-    GetPage(name: home, page: () => const HomeScreen()),
-
+    GetPage(name: main, page: () => const MainScreen()),
+    GetPage(name: signUp, page: () => const RegisterScreen()),
   ];
 
   static getRoute(Widget navigateTo) {

@@ -9,21 +9,22 @@ import 'custom_button.dart';
 
 class NoInternetScreen extends StatelessWidget {
   final Widget child;
-  NoInternetScreen({required this.child});
+  const NoInternetScreen({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(MediaQuery.of(context).size.height*0.025),
+      padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.025),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(Images.noInternet, width: 150, height: 150),
-            Text('oops'.tr, style: robotoBold.copyWith(
-              fontSize: 30,
-              color: Theme.of(context).textTheme.bodyLarge!.color,
-            )),
+            Text('oops'.tr,
+                style: robotoBold.copyWith(
+                  fontSize: 30,
+                  color: Theme.of(context).textTheme.bodyLarge!.color,
+                )),
             const SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
             Text(
               'no_internet_connection'.tr,
@@ -36,14 +37,16 @@ class NoInternetScreen extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 40),
               child: CustomButton(
                 onPressed: () async {
-                  if(await Connectivity().checkConnectivity() != ConnectivityResult.none) {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => child));
+                  if (await Connectivity().checkConnectivity() !=
+                      ConnectivityResult.none) {
+                    // ignore: use_build_context_synchronously
+                    Navigator.pushReplacement(
+                        context, MaterialPageRoute(builder: (_) => child));
                   }
                 },
                 buttonText: 'retry'.tr,
               ),
             ),
-
           ],
         ),
       ),

@@ -25,9 +25,9 @@ Future<void> main() async {
     HttpOverrides.global = MyHttpOverrides();
   }
 
-  Map<String, Map<String, String>> _languages = await di.init();
+  Map<String, Map<String, String>> languages = await di.init();
 
-  runApp(MyApp(languages: _languages));
+  runApp(MyApp(languages: languages));
 }
 
 class MyApp extends StatelessWidget {
@@ -39,7 +39,9 @@ class MyApp extends StatelessWidget {
     return GetBuilder<ThemeController>(builder: (themeController) {
       return GetBuilder<LocalizationController>(builder: (localizeController) {
         FlutterNativeSplash.remove();
-        print("Kết thúc init: ${DateTime.now()}");
+        if (kDebugMode) {
+          print("Kết thúc init: ${DateTime.now()}");
+        }
         return GetMaterialApp(
           title: AppConstants.APP_NAME,
           debugShowCheckedModeBanner: false,

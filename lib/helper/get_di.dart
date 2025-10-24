@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,26 +16,22 @@ import '../utils/app_constants.dart';
 Future<Map<String, Map<String, String>>> init() async {
   // Core
   final sharedPreferences = await SharedPreferences.getInstance();
-  final firstCamera = await availableCameras();
-
+  // final firstCamera = await availableCameras();
   Get.lazyPut(() => sharedPreferences);
-  Get.lazyPut(() => firstCamera);
+  // Get.lazyPut(() => firstCamera);
   Get.lazyPut(() => ApiClient(
       appBaseUrl: AppConstants.BASE_URL, sharedPreferences: Get.find()));
-
   // Repository
   Get.lazyPut(() => LanguageRepo());
   Get.lazyPut(
       () => AuthRepo(apiClient: Get.find(), sharedPreferences: Get.find()));
 
-  Get.lazyPut(
-          () => SplashRepo(apiClient: Get.find()));
+  Get.lazyPut(() => SplashRepo(apiClient: Get.find()));
   // Controller
   Get.lazyPut(() => ThemeController(sharedPreferences: Get.find()));
   Get.lazyPut(() => LocalizationController(sharedPreferences: Get.find()));
   Get.lazyPut(() => SplashController(repo: Get.find()));
   Get.lazyPut(() => AuthController(repo: Get.find()));
-
 
   // Retrieving localized data
   Map<String, Map<String, String>> languages = {};
@@ -44,7 +39,8 @@ Future<Map<String, Map<String, String>>> init() async {
     String jsonStringValues = await rootBundle
         .loadString('assets/language/${languageModel.languageCode}.json');
     Map<String, dynamic> mappedJson = json.decode(jsonStringValues);
-    Map<String, String> _json = Map();
+    // ignore: no_leading_underscores_for_local_identifiers
+    Map<String, String> _json = {};
     mappedJson.forEach((key, value) {
       _json[key] = value.toString();
     });

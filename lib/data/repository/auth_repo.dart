@@ -1,9 +1,6 @@
 import 'dart:async';
-
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timesheet/data/model/body/role.dart';
 import 'package:timesheet/data/model/body/token_request.dart';
 import 'package:timesheet/data/model/body/user.dart';
 
@@ -21,11 +18,11 @@ class AuthRepo {
     //header login
     var token = "Basic Y29yZV9jbGllbnQ6c2VjcmV0";
     var languageCode = sharedPreferences.getString(AppConstants.LANGUAGE_CODE);
-    Map<String, String> _header = {
+    Map<String, String> header = {
       'Content-Type': 'application/x-www-form-urlencoded',
       AppConstants.LOCALIZATION_KEY:
           languageCode ?? AppConstants.languages[0].languageCode,
-      'Authorization': '$token'
+      'Authorization': token
     };
     //call api login
     return await apiClient.postDataLogin(
@@ -36,29 +33,30 @@ class AuthRepo {
                 clientId: "core_client",
                 clientSecret: "secret",
                 grantType: "password")
-            .toJson(),_header);
+            .toJson(),
+        header);
+  }
+
+  Future<Response> register({required User user}) async {
+    //header login
+    var token = "Basic Y29yZV9jbGllbnQ6c2VjcmV0";
+    var languageCode = sharedPreferences.getString(AppConstants.LANGUAGE_CODE);
+    Map<String, String> header = {
+      'Content-Type': 'application/json; charset=utf-8',
+      AppConstants.LOCALIZATION_KEY:
+          languageCode ?? AppConstants.languages[0].languageCode,
+      'Authorization': token
+    };
+    return await apiClient.postDataLogin(
+        AppConstants.SIGN_UP, user.toJson(), header);
   }
 
   Future<Response> logOut() async {
     return await apiClient.deleteData(AppConstants.LOG_OUT);
   }
 
-  Future<Response> getCurrentUser() async{
+  Future<Response> getCurrentUser() async {
     return await apiClient.getData(AppConstants.GET_USER);
-  }
-
-
-  Future<String> _saveDeviceToken() async {
-    String? _deviceToken = '@';
-    if (!GetPlatform.isWeb) {
-      try {
-        _deviceToken = await FirebaseMessaging.instance.getToken();
-      } catch (e) {}
-    }
-    if (_deviceToken != null) {
-      print('--------Device Token---------- ' + _deviceToken);
-    }
-    return _deviceToken!;
   }
 
   // for  user token
@@ -69,6 +67,7 @@ class AuthRepo {
     return await sharedPreferences.setString(
         AppConstants.TOKEN, "Bearer $token");
   }
+
   Future<bool> clearUserToken() async {
     return await sharedPreferences.remove(AppConstants.TOKEN);
   }

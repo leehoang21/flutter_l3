@@ -1,3 +1,4 @@
+import 'role.dart';
 
 class User {
   int? id;
@@ -11,11 +12,18 @@ class User {
   String? firstName;
   String? lastName;
   String? password;
+  String? gender;
+  String? university;
+  int? year;
+  bool? hasPhoto;
+  bool? changePass;
+  String? tokenDevice;
+  List? roles;
 
   User({
     this.id,
     this.username,
-    this.active,
+    this.active = true,
     this.birthPlace,
     this.confirmPassword,
     this.displayName,
@@ -24,10 +32,17 @@ class User {
     this.firstName,
     this.lastName,
     this.password,
+    this.gender,
+    this.university,
+    this.year,
+    this.hasPhoto,
+    this.changePass = true,
+    this.tokenDevice,
+    this.roles,
   });
   User.fromJson(Map<String, dynamic> json) {
-    // List<dynamic> listRoles = json['roles']??[];
-    // List<Role> rolesList = listRoles.cast<Role>().toList();
+    List<dynamic> listRoles = json['roles'] ?? [];
+    List<Role> rolesList = listRoles.map((e) => Role.fromJson(e)).toList();
     id = json['id'];
     username = json['username'];
     active = json['active'];
@@ -39,25 +54,30 @@ class User {
     firstName = json['firstName'];
     lastName = json['lastName'];
     password = json['password'];
+    roles = rolesList;
+    university = json['university'];
+    year = json['year'];
+    gender = json['gender'];
+    hasPhoto = json['hasPhoto'];
+    changePass = json['changePass'];
+    tokenDevice = json['tokenDevice'];
   }
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'username':username,
-      'active':active,
-      'birthPlace':birthPlace,
-      'confirmPassword':confirmPassword,
-      "displayName":displayName,
-      'dob':dob,
-      'email':email,
-      'firstName':firstName,
-      'lastName':lastName,
-      'password':password,
-      // 'roles': roles?.map((roles) => roles.toJson()).toList(),
-      // 'university':university,
-      // 'year':year,
-      // 'gender':gender,
-      // 'hasPhoto':hasPhoto
+      'username': username,
+      'birthPlace': birthPlace,
+      'confirmPassword': confirmPassword,
+      "displayName": displayName,
+      'dob': dob,
+      'email': email,
+      'firstName': firstName,
+      'lastName': lastName,
+      'password': password,
+      'university': university,
+      'year': year,
+      'gender': gender,
+      'changePass': changePass,
+      'active': active,
     };
   }
 }

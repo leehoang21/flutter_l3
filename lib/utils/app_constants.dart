@@ -1,3 +1,4 @@
+// ignore_for_file: constant_identifier_names
 
 import '../data/model/language_model.dart';
 import 'images.dart';
@@ -27,9 +28,7 @@ class AppConstants {
   static const String MODULE_ID = 'moduleId';
   static const String LOCALIZATION_KEY = 'X-localization';
 
-
   // Shared Key
-
 
   static List<LanguageModel> languages = [
     LanguageModel(

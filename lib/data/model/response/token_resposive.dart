@@ -24,13 +24,13 @@ class TokenResponsive {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['access_token'] = this.accessToken;
-    data['token_type'] = this.tokenType;
-    data['refresh_token'] = this.refreshToken;
-    data['expires_in'] = this.expiresIn;
-    data['scope'] = this.scope;
-    data['organization'] = this.organization;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['access_token'] = accessToken;
+    data['token_type'] = tokenType;
+    data['refresh_token'] = refreshToken;
+    data['expires_in'] = expiresIn;
+    data['scope'] = scope;
+    data['organization'] = organization;
     return data;
   }
 }
