@@ -6,6 +6,10 @@ class DateConverter {
     return DateFormat('yyyy-MM-dd hh:mm:ss a').format(dateTime);
   }
 
+  static String formatToDate(DateTime dateTime) {
+    return DateFormat('dd/MM/yyyy').format(dateTime);
+  }
+
   static String dateToTimeOnly(DateTime dateTime) {
     return DateFormat(_timeFormatter()).format(dateTime);
   }

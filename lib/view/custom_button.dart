@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timesheet/utils/color_resources.dart';
 
 import '../utils/dimensions.dart';
 import '../utils/styles.dart';
@@ -32,7 +33,7 @@ class CustomButton extends StatelessWidget {
           ? Theme.of(context).disabledColor
           : transparent!
               ? Colors.transparent
-              : Theme.of(context).primaryColor,
+              : ColorResources.getPrimaryColor(),
       minimumSize: Size(width != null ? width! : Dimensions.WEB_MAX_WIDTH,
           height != null ? height! : 50),
       padding: EdgeInsets.zero,

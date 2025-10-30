@@ -40,6 +40,10 @@ class ColorResources {
     return Get.isDarkMode ? const Color(0xFFe3e3e8) : const Color(0xFFD1D1D6);
   }
 
+  static Color getGreyBaseGray5() {
+    return Get.isDarkMode ? const Color(0xFFC7C7CC) : const Color(0xFF757575);
+  }
+
   static Color getGreyBaseGray6() {
     return Get.isDarkMode ? const Color(0xFFb2b5c8) : const Color(0xFFF2F2F7);
   }
@@ -50,6 +54,16 @@ class ColorResources {
 
   static Color getBackgroundColor() {
     return Get.isDarkMode ? const Color(0xFF343636) : const Color(0xFFFAFAFA);
+  }
+
+  static Color getBackgroundCardColor() {
+    return !Get.isDarkMode ? const Color(0xFF343636) : const Color(0xFFFAFAFA);
+  }
+
+  static Color getAppbarColor() {
+    return Get.isDarkMode
+        ? const Color(0xff70775A).withOpacity(0.1)
+        : const Color(0xff70775A);
   }
 
   static Color getBlackAndWhite() {
@@ -80,6 +94,10 @@ class ColorResources {
 
   static Color getTextColor() {
     return Get.isDarkMode ? const Color(0xFFE4E8EC) : const Color(0xFF25282B);
+  }
+
+  static Color getCardTextColor() {
+    return Get.isDarkMode ? cardTextColor : const Color(0xFFE4E8EC);
   }
 
   static Color getAcceptTextColor() {
@@ -183,7 +201,8 @@ class ColorResources {
   static const Color COLOR_OXFORD_BLUE = Color(0xff282F39);
   static const Color COLOR_GAINSBORO = Color(0xffE8E8E8);
   static const Color COLOR_NIGHER_RIDER = Color(0xff303030);
-  static const Color BACKGROUND_COLOR = Color(0xffE5E5E5);
+  static const Color BACKGROUND_COLOR = Color(0xFFFAFAFA);
+  static const Color BACKGROUND_COLOR_DARK = Color(0xFF343636);
   static const Color COLOR_GREY_BUNKER = Color(0xff25282B);
   static const Color COLOR_GREY_CHATEAU = Color(0xffA0A4A8);
   static const Color BORDER_COLOR = Color(0xFFDCDCDC);
@@ -220,6 +239,7 @@ class ColorResources {
   static Color gradientColor = const Color(0xFF45A735);
   static Color backgroundColor = const Color(0xFFE5E5E5);
   static Color balanceTextColor = const Color(0xFF393939);
+  static Color cardTextColor = const Color(0xFF303030);
   static Color cardOrangeColor = const Color(0xFFFFCB66);
   static Color cardPinkColor = const Color(0xFFF6BDE9);
   static Color cardPestColor = const Color(0xFFACD9B3);

@@ -1,10 +1,10 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:timesheet/utils/internet_checker.dart';
+import 'package:timesheet/view/scaffold_widget.dart';
 import '../../controller/auth_controller.dart';
 import '../../controller/splash_controller.dart';
 import '../../helper/route_helper.dart';
+import '../../utils/color_resources.dart';
 import '../../utils/dimensions.dart';
 import '../../utils/images.dart';
 import '../../view/no_internet_screen.dart';
@@ -20,45 +20,27 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    bool firstTime = true;
-    InternetChecker.listenConnection((ConnectivityResult result) {
-      if (!firstTime) {
-        bool isNotConnected = result != ConnectivityResult.wifi &&
-            result != ConnectivityResult.mobile;
-        isNotConnected
-            ? const SizedBox()
-            : ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          backgroundColor: isNotConnected ? Colors.red : Colors.green,
-          duration: Duration(seconds: isNotConnected ? 6000 : 3),
-          content: Text(
-            isNotConnected ? 'no_connection'.tr : 'connected'.tr,
-            textAlign: TextAlign.center,
-          ),
-        ));
-        if (!isNotConnected) {
-          _route();
-        }
-      }
-      firstTime = false;
-    });
     _route();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWidget(
       body: GetBuilder<SplashController>(builder: (splashController) {
-        return Container(
+        return SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          color: Colors.white,
           child: Center(
             child: splashController.hasConnection
                 ? Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Image.asset(Images.logo, width: 200),
+                      Image.asset(
+                        Images.logo,
+                        width: 200,
+                        colorBlendMode: BlendMode.modulate,
+                        color: ColorResources.getBackgroundColor(),
+                      ),
                       const SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                     ],
                   )
@@ -71,12 +53,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   _route() {
     Get.find<AuthController>().getCurrentUser().then((value) => {
-          if (value == 200)
+          if (value != null)
             {
-              Get.toNamed(RouteHelper.main),
+              Get.offAllNamed(RouteHelper.getMainRoute(value.roles ?? [])),
             }
           else
-            {Get.offNamed(RouteHelper.signIn)}
+            {Get.offAllNamed(RouteHelper.signIn)}
         });
   }
 }

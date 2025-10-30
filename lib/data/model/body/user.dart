@@ -7,10 +7,8 @@ class User {
   String? birthPlace;
   String? confirmPassword;
   String? displayName;
-  String? dob;
+  DateTime? dob;
   String? email;
-  String? firstName;
-  String? lastName;
   String? password;
   String? gender;
   String? university;
@@ -18,7 +16,8 @@ class User {
   bool? hasPhoto;
   bool? changePass;
   String? tokenDevice;
-  List? roles;
+  List<Role>? roles;
+  String? image;
 
   User({
     this.id,
@@ -29,8 +28,6 @@ class User {
     this.displayName,
     this.dob,
     this.email,
-    this.firstName,
-    this.lastName,
     this.password,
     this.gender,
     this.university,
@@ -39,6 +36,7 @@ class User {
     this.changePass = true,
     this.tokenDevice,
     this.roles,
+    this.image,
   });
   User.fromJson(Map<String, dynamic> json) {
     List<dynamic> listRoles = json['roles'] ?? [];
@@ -49,10 +47,11 @@ class User {
     birthPlace = json['birthPlace'];
     confirmPassword = json['confirmPassword'];
     displayName = json['displayName'];
-    dob = json['dob'];
+    dob = json["dob"] == null
+        ? null
+        : DateTime.fromMillisecondsSinceEpoch(json["date"]);
     email = json['email'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
+
     password = json['password'];
     roles = rolesList;
     university = json['university'];
@@ -61,6 +60,7 @@ class User {
     hasPhoto = json['hasPhoto'];
     changePass = json['changePass'];
     tokenDevice = json['tokenDevice'];
+    image = json['image'];
   }
   Map<String, dynamic> toJson() {
     return {
@@ -68,10 +68,8 @@ class User {
       'birthPlace': birthPlace,
       'confirmPassword': confirmPassword,
       "displayName": displayName,
-      'dob': dob,
+      'dob': dob?.toIso8601String(),
       'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
       'password': password,
       'university': university,
       'year': year,
@@ -80,4 +78,43 @@ class User {
       'active': active,
     };
   }
+
+  User copyWith({
+    bool? active,
+    String? birthPlace,
+    bool? changePass,
+    String? confirmPassword,
+    String? displayName,
+    DateTime? dob,
+    String? email,
+    String? gender,
+    bool? hasPhoto,
+    int? id,
+    String? image,
+    String? password,
+    List<Role>? roles,
+    String? tokenDevice,
+    String? university,
+    String? username,
+    int? year,
+  }) =>
+      User(
+        active: active ?? this.active,
+        birthPlace: birthPlace ?? this.birthPlace,
+        changePass: changePass ?? this.changePass,
+        confirmPassword: confirmPassword ?? this.confirmPassword,
+        displayName: displayName ?? this.displayName,
+        dob: dob ?? this.dob,
+        email: email ?? this.email,
+        gender: gender ?? this.gender,
+        hasPhoto: hasPhoto ?? this.hasPhoto,
+        id: id ?? this.id,
+        image: image ?? this.image,
+        password: password ?? this.password,
+        roles: roles ?? this.roles,
+        tokenDevice: tokenDevice ?? this.tokenDevice,
+        university: university ?? this.university,
+        username: username ?? this.username,
+        year: year ?? this.year,
+      );
 }

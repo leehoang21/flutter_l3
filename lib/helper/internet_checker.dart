@@ -14,4 +14,10 @@ class InternetChecker {
       }
     });
   }
+
+  static bool isNotConnected(ConnectivityResult result) {
+    return result != ConnectivityResult.wifi &&
+        result != ConnectivityResult.mobile &&
+        result != ConnectivityResult.ethernet;
+  }
 }

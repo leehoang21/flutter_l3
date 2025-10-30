@@ -1,17 +1,26 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timesheet/data/model/body/token_request.dart';
 import 'package:timesheet/data/model/body/user.dart';
+import 'package:timesheet/utils/enum_role.dart';
+import 'package:timesheet/utils/utils.dart';
 
+import '../../helper/firebase_helper.dart';
 import '../../utils/app_constants.dart';
 import '../api/api_client.dart';
 
-class AuthRepo {
+class AuthRepo extends GetxService {
   final ApiClient apiClient;
   final SharedPreferences sharedPreferences;
+  final FirebaseHelper firebaseHelper;
 
-  AuthRepo({required this.apiClient, required this.sharedPreferences});
+  AuthRepo({
+    required this.apiClient,
+    required this.sharedPreferences,
+    required this.firebaseHelper,
+  });
 
   Future<Response> login(
       {required String username, required String password}) async {
@@ -25,7 +34,7 @@ class AuthRepo {
       'Authorization': token
     };
     //call api login
-    return await apiClient.postDataLogin(
+    final result = await apiClient.postDataLogin(
         AppConstants.LOGIN_URI,
         TokenRequest(
                 username: username,
@@ -35,28 +44,53 @@ class AuthRepo {
                 grantType: "password")
             .toJson(),
         header);
+    if (result.statusCode == 200) {
+      //save device token
+      String deviceToken = await _saveDeviceToken();
+      //update device token
+      await _updateMySeft(user: User(tokenDevice: deviceToken));
+    }
+    return result;
+  }
+
+  Future<Response> _updateMySeft({required User user}) {
+    return apiClient.postData('${AppConstants.users}/update-myself',
+        json.encode(user.toJson()), null);
   }
 
   Future<Response> register({required User user}) async {
-    //header login
-    var token = "Basic Y29yZV9jbGllbnQ6c2VjcmV0";
-    var languageCode = sharedPreferences.getString(AppConstants.LANGUAGE_CODE);
-    Map<String, String> header = {
-      'Content-Type': 'application/json; charset=utf-8',
-      AppConstants.LOCALIZATION_KEY:
-          languageCode ?? AppConstants.languages[0].languageCode,
-      'Authorization': token
-    };
-    return await apiClient.postDataLogin(
-        AppConstants.SIGN_UP, user.toJson(), header);
+    final result = await apiClient.postData(
+        AppConstants.SIGN_UP,
+        json.encode(user.copyWith(roles: [
+          ...user.roles ?? [],
+          EnumRole.user.value,
+        ]).toJson()),
+        null);
+
+    return result;
   }
 
   Future<Response> logOut() async {
+    //save device token
+    await _updateMySeft(user: User(tokenDevice: ''));
     return await apiClient.deleteData(AppConstants.LOG_OUT);
   }
 
   Future<Response> getCurrentUser() async {
     return await apiClient.getData(AppConstants.GET_USER);
+  }
+
+  Future<String> _saveDeviceToken() async {
+    String deviceToken = '@';
+    if (!GetPlatform.isWeb) {
+      try {
+        deviceToken = await firebaseHelper.firebaseMessaging.getToken() ?? '@';
+      } catch (e) {
+        logger('Unable to get FCM token');
+      }
+    }
+    logger('--------Device Token---------- $deviceToken');
+    return deviceToken;
   }
 
   // for  user token

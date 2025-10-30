@@ -8,6 +8,9 @@ import 'package:timesheet/helper/route_helper.dart';
 import 'package:timesheet/screen/register/register_screen_contant.dart';
 import 'package:timesheet/utils/images.dart';
 import 'package:timesheet/utils/utils.dart';
+import 'package:timesheet/view/text_field_widget.dart';
+
+import '../../utils/color_resources.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -30,8 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final _showPass = false.obs;
-  final _confirmShowPass = false.obs;
+  final _birthDay = DateTime.now().obs;
 
   @override
   void initState() {
@@ -41,345 +43,200 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
         body: SingleChildScrollView(
-          child: GetBuilder<AuthController>(
-            builder: (controller) => Opacity(
-              opacity: controller.loading ? 0.3 : 1,
-              child: Form(
-                key: _formKey,
-                child: Container(
-                  color: Colors.white,
+      child: GetBuilder<AuthController>(
+        builder: (controller) => Opacity(
+          opacity: controller.loading ? 0.3 : 1,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.fromLTRB(100, 56, 100, 60),
+                  child: Image.asset(
+                    Images.logo,
+                    colorBlendMode: BlendMode.modulate,
+                    color: ColorResources.getBackgroundColor(),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(100, 56, 100, 60),
-                        color: Colors.white,
-                        child: Image.asset(Images.logo),
+                      Text(
+                        'sign_up_to_your_account'.tr,
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       Container(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                        child: Column(
-                          children: [
-                            Text(
-                              'sign_up_to_your_account'.tr,
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
+                        margin: const EdgeInsets.only(top: 20),
+                        child: TextFieldWidget(
+                          validator: RegisterContant.validateUserName,
+                          controller: _usernameController,
+                          textInputAction: TextInputAction.next,
+                          isObscureText: false,
+                          labelText: "username".tr,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: TextFieldWidget(
+                          controller: _firstnameController,
+                          textInputAction: TextInputAction.next,
+                          isObscureText: false,
+                          validator: RegisterContant.validateFirstName,
+                          labelText: "first_name".tr,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: TextFieldWidget(
+                          controller: _lastnameController,
+                          textInputAction: TextInputAction.next,
+                          isObscureText: false,
+                          validator: RegisterContant.validateLastName,
+                          labelText: "last_name".tr,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: TextFieldWidget(
+                          controller: _genderController,
+                          textInputAction: TextInputAction.next,
+                          isObscureText: false,
+                          labelText: "gender".tr,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: TextFieldWidget(
+                          controller: _birthdayController,
+                          textInputAction: TextInputAction.next,
+                          isObscureText: false,
+                          labelText: "birthday".tr,
+                          suffixIcon: IconButton(
+                            onPressed: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: _birthDay.value,
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime.now(),
+                              );
+                              if (pickedDate != null) {
+                                _birthDay.value = pickedDate;
+                                _birthdayController.text =
+                                    DateConverter.formatToDate(pickedDate);
+                              }
+                            },
+                            icon: Icon(
+                              Icons.calendar_month_outlined,
+                              color: ColorResources.getAcceptBtn(),
                             ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 20),
-                              child: TextFormField(
-                                validator: RegisterContant.validateUserName,
-                                controller: _usernameController,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 28),
-                                    border: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 1,
-                                            color: Color.fromRGBO(
-                                                244, 244, 244, 1)),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    hintText: "user_name".tr,
-                                    hintStyle:
-                                        const TextStyle(color: Colors.grey)),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 20),
-                              child: TextFormField(
-                                validator: RegisterContant.validateFirstName,
-                                controller: _firstnameController,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 28),
-                                    border: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 1,
-                                            color: Color.fromRGBO(
-                                                244, 244, 244, 1)),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    hintText: "first_name".tr,
-                                    hintStyle:
-                                        const TextStyle(color: Colors.grey)),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 20),
-                              child: TextFormField(
-                                validator: RegisterContant.validateLastName,
-                                controller: _lastnameController,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 28),
-                                    border: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 1,
-                                            color: Color.fromRGBO(
-                                                244, 244, 244, 1)),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    hintText: "last_name".tr,
-                                    hintStyle:
-                                        const TextStyle(color: Colors.grey)),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 20),
-                              child: TextFormField(
-                                controller: _genderController,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 28),
-                                    border: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 1,
-                                            color: Color.fromRGBO(
-                                                244, 244, 244, 1)),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    hintText: "gender".tr,
-                                    hintStyle:
-                                        const TextStyle(color: Colors.grey)),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 20),
-                              child: TextFormField(
-                                controller: _birthdayController,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                    suffixIcon: GestureDetector(
-                                        onTap: () {
-                                          // Show date picker
-                                          showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(1900),
-                                            lastDate: DateTime.now(),
-                                          ).then((selectedDate) {
-                                            if (selectedDate != null) {
-                                              _birthdayController.text =
-                                                  DateConverter
-                                                      .dateToDateAndTimeAm(
-                                                          selectedDate);
-                                            }
-                                          });
-                                        },
-                                        child:
-                                            const Icon(Icons.calendar_today)),
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 28),
-                                    border: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 1,
-                                            color: Color.fromRGBO(
-                                                244, 244, 244, 1)),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    hintText: "birthday".tr,
-                                    hintStyle:
-                                        const TextStyle(color: Colors.grey)),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 20),
-                              child: TextFormField(
-                                validator: RegisterContant.validateEmail,
-                                controller: _emailController,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 28),
-                                    border: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 1,
-                                            color: Color.fromRGBO(
-                                                244, 244, 244, 1)),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    hintText: "email".tr,
-                                    hintStyle:
-                                        const TextStyle(color: Colors.grey)),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 20),
-                              child: TextFormField(
-                                controller: _universityController,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 28),
-                                    border: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 1,
-                                            color: Color.fromRGBO(
-                                                244, 244, 244, 1)),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    hintText: "university".tr,
-                                    hintStyle:
-                                        const TextStyle(color: Colors.grey)),
-                              ),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(top: 20),
-                              child: TextFormField(
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(1),
-                                ],
-                                controller: _studentstudyController,
-                                textInputAction: TextInputAction.next,
-                                decoration: InputDecoration(
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 28),
-                                    border: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            width: 1,
-                                            color: Color.fromRGBO(
-                                                244, 244, 244, 1)),
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    hintText: "year_study".tr,
-                                    hintStyle:
-                                        const TextStyle(color: Colors.grey)),
-                              ),
-                            ),
-                            Container(
-                                margin: const EdgeInsets.only(top: 20),
-                                child: Obx(
-                                  () => TextFormField(
-                                    validator: RegisterContant.validatePassword,
-                                    textInputAction: TextInputAction.done,
-                                    obscureText: _showPass.value,
-                                    controller: _passwordController,
-                                    decoration: InputDecoration(
-                                        contentPadding:
-                                            const EdgeInsets.only(left: 28),
-                                        suffixIcon: IconButton(
-                                          onPressed: () {
-                                            _showPass.value = !_showPass.value;
-                                          },
-                                          icon: Icon(_showPass.value
-                                              ? Icons.visibility
-                                              : Icons.visibility_off),
-                                        ),
-                                        border: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              width: 1,
-                                              color: Color.fromRGBO(
-                                                  244, 244, 244, 1)),
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        hintText: "password".tr,
-                                        hintStyle: const TextStyle(
-                                            color: Colors.grey)),
-                                  ),
-                                )),
-                            Container(
-                                margin: const EdgeInsets.only(top: 20),
-                                child: Obx(
-                                  () => TextFormField(
-                                    validator: (value) {
-                                      return RegisterContant
-                                          .validateConfirmPassword(
-                                              value, _passwordController.text);
-                                    },
-                                    textInputAction: TextInputAction.done,
-                                    obscureText: _confirmShowPass.value,
-                                    controller: _confirmPasswordController,
-                                    decoration: InputDecoration(
-                                        contentPadding:
-                                            const EdgeInsets.only(left: 28),
-                                        suffixIcon: IconButton(
-                                          onPressed: () {
-                                            _confirmShowPass.value =
-                                                !_confirmShowPass.value;
-                                          },
-                                          icon: Icon(_confirmShowPass.value
-                                              ? Icons.visibility
-                                              : Icons.visibility_off),
-                                        ),
-                                        border: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                              width: 1,
-                                              color: Color.fromRGBO(
-                                                  244, 244, 244, 1)),
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        hintText: "confirm_password".tr,
-                                        hintStyle: const TextStyle(
-                                            color: Colors.grey)),
-                                  ),
-                                )),
-                            Container(
-                              margin: const EdgeInsets.only(top: 40),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  _login();
-                                },
-                                style: TextButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15)),
-                                ),
-                                child: Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(40, 18, 40, 18),
-                                  child: Text("sign_up".tr,
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Color.fromRGBO(
-                                              191, 252, 226, 1.0))),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            GestureDetector(
-                              onTap: () {
-                                Get.toNamed(RouteHelper.signIn);
-                              },
-                              child: Text(
-                                'already_account'.tr,
-                                style: const TextStyle(
-                                    color: Color.fromRGBO(0, 123, 255, 1)),
-                              ),
-                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: TextFieldWidget(
+                          controller: _emailController,
+                          textInputAction: TextInputAction.next,
+                          isObscureText: false,
+                          validator: RegisterContant.validateEmail,
+                          labelText: "email".tr,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: TextFieldWidget(
+                          controller: _universityController,
+                          textInputAction: TextInputAction.next,
+                          isObscureText: false,
+                          labelText: "university".tr,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        child: TextFieldWidget(
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(1),
                           ],
+                          controller: _studentstudyController,
+                          textInputAction: TextInputAction.next,
+                          isObscureText: false,
+                          labelText: "student_study_year".tr,
+                        ),
+                      ),
+                      Container(
+                          margin: const EdgeInsets.only(top: 20),
+                          child: TextFieldWidget(
+                            isObscureText: true,
+                            controller: _passwordController,
+                            labelText: "password".tr,
+                            validator: RegisterContant.validatePassword,
+                          )),
+                      Container(
+                          margin: const EdgeInsets.only(top: 20),
+                          child: TextFieldWidget(
+                            isObscureText: true,
+                            controller: _confirmPasswordController,
+                            labelText: "confirm_password".tr,
+                            validator: (value) {
+                              return RegisterContant.validateConfirmPassword(
+                                  value, _passwordController.text);
+                            },
+                          )),
+                      Container(
+                        margin: const EdgeInsets.only(top: 40),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _register();
+                          },
+                          style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.fromLTRB(40, 18, 40, 18),
+                            child: Text("sign_up".tr,
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Color.fromRGBO(191, 252, 226, 1.0))),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(RouteHelper.signIn);
+                        },
+                        child: Text(
+                          'already_account'.tr,
+                          style: TextStyle(
+                              color: ColorResources.getPrimaryTextColor()),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+    ));
   }
 
-  _login() {
+  _register() {
     if (_formKey.currentState?.validate() == true) {
       final user = User(
         username: _usernameController.text,
-        firstName: _firstnameController.text,
-        lastName: _lastnameController.text,
         email: _emailController.text,
-        dob: _birthdayController.text,
+        dob: _birthDay.value,
         password: _passwordController.text,
         confirmPassword: _confirmPasswordController.text,
-        displayName: "oceantech",
+        displayName: '${_firstnameController.text} ${_lastnameController.text}',
         birthPlace: "thai nguyen",
         gender: _genderController.text,
         university: _universityController.text,
@@ -389,7 +246,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       Get.find<AuthController>().register(user).then((value) => {
             if (value == 200)
-              {Get.toNamed(RouteHelper.main)}
+              {Get.offAllNamed(RouteHelper.getSignInRoute())}
             else
               {
                 ScaffoldMessenger.of(context)
