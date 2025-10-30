@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:timesheet/controller/comment_controller.dart';
 import 'package:timesheet/data/model/body/post_model.dart';
-import 'package:timesheet/view/scaffold_widget.dart';
 import '../../../utils/time_ago_utils.dart';
 import '../../../view/avatar_widget.dart';
 import '../../../view/text_field_widget.dart';
@@ -21,6 +20,7 @@ class CommentWidget extends StatefulWidget {
 
 class _CommentWidgetState extends State<CommentWidget> {
   final TextEditingController _controller = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -30,49 +30,48 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldWidget(
-      body: GetBuilder<CommentController>(
-        builder: (controller) {
-          return Column(
-            children: [
-              Expanded(
-                child: ListView(
-                  children: [
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Column(
-                        children: (controller.comments)
-                            .map(
-                              (e) => CommentCard(
-                                model: e,
-                              ),
-                            )
-                            .toList()),
-                  ],
+    return GetBuilder<CommentController>(
+      builder: (controller) {
+        return Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.only(
+                  top: 20,
+                ),
+                itemCount: controller.comments.length,
+                controller: _scrollController,
+                itemBuilder: (context, index) => CommentCard(
+                  model: controller.comments[index],
                 ),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: TextFieldWidget(
-                  controller: _controller,
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.send),
-                    onPressed: () async {
-                      await controller.commment(_controller.text, widget.model);
-                      widget.pagingController.refresh();
-                      _controller.clear();
-                    },
-                  ),
-                  isObscureText: false,
-                  labelText: '',
-                ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom + 20,
               ),
-            ],
-          );
-        },
-      ),
+              child: TextFieldWidget(
+                controller: _controller,
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: () async {
+                    await controller.commment(_controller.text, widget.model);
+                    widget.pagingController.refresh();
+                    _controller.clear();
+                    _scrollController.animateTo(
+                      _scrollController.position.maxScrollExtent + 100,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                    );
+                  },
+                ),
+                isObscureText: false,
+                labelText: '',
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

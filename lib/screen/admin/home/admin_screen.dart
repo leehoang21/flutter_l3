@@ -37,7 +37,6 @@ class _AdminScreenState extends State<AdminScreen> {
 
   @override
   void dispose() {
-    _pagingController.dispose();
     super.dispose();
   }
 

@@ -36,7 +36,6 @@ class _UsersScreenState extends State<UsersScreen> {
 
   @override
   void dispose() {
-    _pagingController.dispose();
     super.dispose();
   }
 

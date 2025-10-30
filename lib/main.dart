@@ -48,10 +48,16 @@ Future<void> main() async {
   runApp(MyApp(languages: languages));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final Map<String, Map<String, String>>? languages;
   const MyApp({super.key, this.languages});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isFirstBuild = true;
   @override
   Widget build(BuildContext context) {
     return GetBuilder<LocalizationController>(builder: (localizeController) {
@@ -69,7 +75,7 @@ class MyApp extends StatelessWidget {
         locale: localizeController.locale,
         theme: light(),
         darkTheme: dark(),
-        translations: Messages(languages: languages),
+        translations: Messages(languages: widget.languages),
         fallbackLocale: Locale(AppConstants.languages[0].languageCode,
             AppConstants.languages[0].countryCode),
         initialRoute: GetPlatform.isWeb
@@ -84,20 +90,24 @@ class MyApp extends StatelessWidget {
   }
 
   Widget _buildInternetChecker(BuildContext context, Widget? widget) {
-    InternetChecker.listenConnection((ConnectivityResult result) {
-      final isNotConnected = InternetChecker.isNotConnected(result);
-      isNotConnected
-          ? const SizedBox()
-          : ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        backgroundColor: isNotConnected ? Colors.red : Colors.green,
-        duration: Duration(seconds: isNotConnected ? 6000 : 3),
-        content: Text(
-          isNotConnected ? 'no_connection'.tr : 'connected'.tr,
-          textAlign: TextAlign.center,
-        ),
-      ));
-    });
+    if (isFirstBuild) {
+      InternetChecker.listenConnection((ConnectivityResult result) {
+        final isNotConnected = InternetChecker.isNotConnected(result);
+        isNotConnected
+            ? const SizedBox()
+            : ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: isNotConnected ? Colors.red : Colors.green,
+          duration: Duration(seconds: isNotConnected ? 6000 : 3),
+          content: Text(
+            isNotConnected ? 'no_connection'.tr : 'connected'.tr,
+            textAlign: TextAlign.center,
+          ),
+        ));
+      });
+      isFirstBuild = false;
+    }
+
     return widget ?? const SizedBox();
   }
 }

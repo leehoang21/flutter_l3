@@ -5,7 +5,6 @@ import 'package:timesheet/controller/post_controller.dart';
 import 'package:timesheet/utils/images.dart';
 import 'package:timesheet/view/avatar_widget.dart';
 import '../../../data/model/body/post_model.dart';
-
 import '../../../utils/time_ago_utils.dart';
 import 'comment_widget.dart';
 import 'save_post_widget.dart';
@@ -102,17 +101,15 @@ class PostItem extends StatelessWidget {
                         showModalBottomSheet(
                             context: context,
                             isScrollControlled: true,
+                            useSafeArea: true,
                             builder: (context) {
-                              return Padding(
-                                  padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom,
-                                  ),
-                                  child: CommentWidget(
-                                    model: data,
-                                    pagingController: pagingController,
-                                  ));
+                              return SizedBox(
+                                height: MediaQuery.of(context).size.height,
+                                child: CommentWidget(
+                                  model: data,
+                                  pagingController: pagingController,
+                                ),
+                              );
                             });
                       },
                       child: const Icon(Icons.comment_outlined)),
