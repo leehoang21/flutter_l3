@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:timesheet/controller/post_controller.dart';
 import 'package:timesheet/utils/images.dart';
+import 'package:timesheet/utils/styles.dart';
 import 'package:timesheet/view/avatar_widget.dart';
 import '../../../data/model/body/post_model.dart';
 import '../../../utils/time_ago_utils.dart';
@@ -11,10 +12,8 @@ import 'save_post_widget.dart';
 
 class PostItem extends StatelessWidget {
   final PostModel data;
-  final PagingController<int, PostModel> pagingController;
 
-  const PostItem(
-      {super.key, required this.data, required this.pagingController});
+  const PostItem({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -22,20 +21,30 @@ class PostItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Divider(),
+        SizedBox(
+          height: 10.h,
+        ),
         Row(
           children: [
-            const AvatarWidget(
+            AvatarWidget(
               // path: data.user?.image,
               path: '',
+              size: 50.sp,
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 20.w),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(data.user?.displayName ?? ''),
+                Text(
+                  data.user?.username ?? '',
+                  style: robotoBold,
+                ),
                 Text(
                   data.date == null ? "" : timeagoFormat(data.date!),
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  style: robotoRegular.copyWith(
+                    color: Colors.grey,
+                    fontSize: 11.sp,
+                  ),
                 ),
               ],
             ),
@@ -56,8 +65,8 @@ class PostItem extends StatelessWidget {
                                     MediaQuery.of(context).viewInsets.bottom,
                               ),
                               child: SavePostWidget(
-                                  data: data,
-                                  pagingController: pagingController),
+                                data: data,
+                              ),
                             );
                           });
                     },
@@ -68,17 +77,20 @@ class PostItem extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20.h),
         Padding(
-          padding: const EdgeInsets.only(left: 20),
+          padding: EdgeInsets.only(left: 20.w),
           child: Text(
             data.content ?? "",
+            style: robotoRegular.copyWith(
+              fontSize: 12.sp,
+            ),
           ),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20.h),
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
+          padding: EdgeInsets.symmetric(
+            horizontal: 20.w,
           ),
           child: Column(
             children: [
@@ -90,12 +102,13 @@ class PostItem extends StatelessWidget {
                       },
                       child: Image.asset(
                         Images.like,
-                        height: 24,
-                        width: 24,
+                        height: 24.sp,
+                        width: 24.sp,
+                        color: Colors.white,
                       )),
-                  const SizedBox(width: 4),
+                  SizedBox(width: 4.w),
                   Text(' ${data.likes?.length ?? 0}'),
-                  const SizedBox(width: 30),
+                  SizedBox(width: 30.w),
                   InkWell(
                       onTap: () {
                         showModalBottomSheet(
@@ -107,12 +120,14 @@ class PostItem extends StatelessWidget {
                                 height: MediaQuery.of(context).size.height,
                                 child: CommentWidget(
                                   model: data,
-                                  pagingController: pagingController,
                                 ),
                               );
                             });
                       },
-                      child: const Icon(Icons.comment_outlined)),
+                      child: Icon(
+                        Icons.comment_outlined,
+                        size: 24.sp,
+                      )),
                   const SizedBox(width: 4),
                   Text(' ${data.comments?.length ?? 0}'),
                 ],

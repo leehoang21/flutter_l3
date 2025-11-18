@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:timesheet/controller/post_controller.dart';
 import 'package:timesheet/data/model/body/post_model.dart';
+import 'package:timesheet/view/custom_button.dart';
 
 import '../../../helper/date_converter.dart';
 import '../../../utils/color_resources.dart';
 import '../../../view/text_field_widget.dart';
 
 class SavePostWidget extends StatefulWidget {
-  const SavePostWidget(
-      {super.key, required this.data, required this.pagingController});
+  const SavePostWidget({
+    super.key,
+    required this.data,
+  });
   final PostModel data;
-  final PagingController<int, PostModel> pagingController;
 
   @override
   State<SavePostWidget> createState() => _SavePostWidgetState();
@@ -45,33 +47,27 @@ class _SavePostWidgetState extends State<SavePostWidget> {
             labelText: "content".tr,
           ),
         ),
-        const SizedBox(height: 30),
+        SizedBox(height: 20.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: ElevatedButton(
+            SizedBox(
+              width: 40.w,
+            ),
+            Expanded(
+              child: CustomButton(
                 onPressed: () {
                   Get.back();
                 },
-                style: TextButton.styleFrom(
-                  backgroundColor: ColorResources.COLOR_HINT,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(40, 18, 40, 18),
-                  child: Text("cancel".tr,
-                      style: const TextStyle(
-                          fontSize: 16,
-                          color: Color.fromRGBO(191, 252, 226, 1.0))),
-                ),
+                color: ColorResources.COLOR_HINT,
+                title: "cancel".tr,
               ),
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: ElevatedButton(
+            SizedBox(
+              width: 40.w,
+            ),
+            Expanded(
+              child: CustomButton(
                 onPressed: () async {
                   await Get.find<PostController>()
                       .save(
@@ -80,25 +76,17 @@ class _SavePostWidgetState extends State<SavePostWidget> {
                   )
                       .then((value) {
                     Get.back();
-                    widget.pagingController.refresh();
                   });
                 },
-                style: TextButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(40, 18, 40, 18),
-                  child: Text("save".tr,
-                      style: const TextStyle(
-                          fontSize: 16,
-                          color: Color.fromRGBO(191, 252, 226, 1.0))),
-                ),
+                title: "save".tr,
               ),
+            ),
+            SizedBox(
+              width: 40.w,
             ),
           ],
         ),
-        const SizedBox(height: 30),
+        SizedBox(height: 30.h),
       ],
     );
   }

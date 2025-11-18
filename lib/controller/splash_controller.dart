@@ -6,10 +6,6 @@ class SplashController extends GetxController implements GetxService {
 
   SplashController({required this.repo});
 
-  final bool _hasConnection = true;
-
-  bool get hasConnection => _hasConnection;
-
   final String _version = "";
 
   String get version => _version;

@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:timesheet/controller/auth_controller.dart';
 import 'package:timesheet/data/model/body/user.dart';
-import 'package:timesheet/helper/date_converter.dart';
 import 'package:timesheet/helper/route_helper.dart';
 import 'package:timesheet/screen/register/register_screen_contant.dart';
+import 'package:timesheet/utils/dimensions.dart';
 import 'package:timesheet/utils/images.dart';
+import 'package:timesheet/utils/styles.dart';
 import 'package:timesheet/utils/utils.dart';
+import 'package:timesheet/view/custom_button.dart';
 import 'package:timesheet/view/text_field_widget.dart';
 
 import '../../utils/color_resources.dart';
+import '../../view/date_field_widget.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -24,7 +28,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _firstnameController = TextEditingController();
   final TextEditingController _lastnameController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
-  final TextEditingController _birthdayController = TextEditingController();
+  final DateEditingController _birthdayController = DateEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _universityController = TextEditingController();
   final TextEditingController _studentstudyController = TextEditingController();
@@ -33,7 +37,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final _birthDay = DateTime.now().obs;
 
   @override
   void initState() {
@@ -45,183 +48,150 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
         body: SingleChildScrollView(
       child: GetBuilder<AuthController>(
-        builder: (controller) => Opacity(
-          opacity: controller.loading ? 0.3 : 1,
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.fromLTRB(100, 56, 100, 60),
-                  child: Image.asset(
-                    Images.logo,
-                    colorBlendMode: BlendMode.modulate,
-                    color: ColorResources.getBackgroundColor(),
-                  ),
+        builder: (controller) => Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.fromLTRB(100.w, 56.h, 100.w, 60.h),
+                child: Image.asset(
+                  Images.logo,
+                  colorBlendMode: BlendMode.modulate,
+                  color: ColorResources.getBackgroundColor(),
                 ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                  child: Column(
-                    children: [
-                      Text(
-                        'sign_up_to_your_account'.tr,
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              Container(
+                padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 20.h),
+                child: Column(
+                  children: [
+                    Text(
+                      'sign_up_to_your_account'.tr,
+                      style: robotoBold.copyWith(
+                          fontSize: Dimensions.FONT_SIZE_LARGE),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20.h),
+                      child: TextFieldWidget(
+                        validator: RegisterContant.validateUserName,
+                        controller: _usernameController,
+                        textInputAction: TextInputAction.next,
+                        isObscureText: false,
+                        labelText: "username".tr,
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20.h),
+                      child: TextFieldWidget(
+                        controller: _firstnameController,
+                        textInputAction: TextInputAction.next,
+                        isObscureText: false,
+                        validator: RegisterContant.validateFirstName,
+                        labelText: "first_name".tr,
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20.h),
+                      child: TextFieldWidget(
+                        controller: _lastnameController,
+                        textInputAction: TextInputAction.next,
+                        isObscureText: false,
+                        validator: RegisterContant.validateLastName,
+                        labelText: "last_name".tr,
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20.h),
+                      child: TextFieldWidget(
+                        controller: _genderController,
+                        textInputAction: TextInputAction.next,
+                        isObscureText: false,
+                        labelText: "gender".tr,
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20.h),
+                      child: DateFieldWidget(
+                        controller: _birthdayController,
+                        labelText: "birthday".tr,
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20.h),
+                      child: TextFieldWidget(
+                        controller: _emailController,
+                        textInputAction: TextInputAction.next,
+                        isObscureText: false,
+                        validator: RegisterContant.validateEmail,
+                        labelText: "email".tr,
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20.h),
+                      child: TextFieldWidget(
+                        controller: _universityController,
+                        textInputAction: TextInputAction.next,
+                        isObscureText: false,
+                        labelText: "university".tr,
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20.h),
+                      child: TextFieldWidget(
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(1),
+                        ],
+                        controller: _studentstudyController,
+                        textInputAction: TextInputAction.next,
+                        isObscureText: false,
+                        labelText: "student_study_year".tr,
+                      ),
+                    ),
+                    Container(
+                        margin: EdgeInsets.only(top: 20.h),
                         child: TextFieldWidget(
-                          validator: RegisterContant.validateUserName,
-                          controller: _usernameController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          labelText: "username".tr,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
+                          isObscureText: true,
+                          controller: _passwordController,
+                          labelText: "password".tr,
+                          validator: RegisterContant.validatePassword,
+                        )),
+                    Container(
+                        margin: EdgeInsets.only(top: 20.h),
                         child: TextFieldWidget(
-                          controller: _firstnameController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          validator: RegisterContant.validateFirstName,
-                          labelText: "first_name".tr,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: TextFieldWidget(
-                          controller: _lastnameController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          validator: RegisterContant.validateLastName,
-                          labelText: "last_name".tr,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: TextFieldWidget(
-                          controller: _genderController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          labelText: "gender".tr,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: TextFieldWidget(
-                          controller: _birthdayController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          labelText: "birthday".tr,
-                          suffixIcon: IconButton(
-                            onPressed: () async {
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: _birthDay.value,
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime.now(),
-                              );
-                              if (pickedDate != null) {
-                                _birthDay.value = pickedDate;
-                                _birthdayController.text =
-                                    DateConverter.formatToDate(pickedDate);
-                              }
-                            },
-                            icon: Icon(
-                              Icons.calendar_month_outlined,
-                              color: ColorResources.getAcceptBtn(),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: TextFieldWidget(
-                          controller: _emailController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          validator: RegisterContant.validateEmail,
-                          labelText: "email".tr,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: TextFieldWidget(
-                          controller: _universityController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          labelText: "university".tr,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: TextFieldWidget(
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(1),
-                          ],
-                          controller: _studentstudyController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          labelText: "student_study_year".tr,
-                        ),
-                      ),
-                      Container(
-                          margin: const EdgeInsets.only(top: 20),
-                          child: TextFieldWidget(
-                            isObscureText: true,
-                            controller: _passwordController,
-                            labelText: "password".tr,
-                            validator: RegisterContant.validatePassword,
-                          )),
-                      Container(
-                          margin: const EdgeInsets.only(top: 20),
-                          child: TextFieldWidget(
-                            isObscureText: true,
-                            controller: _confirmPasswordController,
-                            labelText: "confirm_password".tr,
-                            validator: (value) {
-                              return RegisterContant.validateConfirmPassword(
-                                  value, _passwordController.text);
-                            },
-                          )),
-                      Container(
-                        margin: const EdgeInsets.only(top: 40),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            _register();
+                          isObscureText: true,
+                          controller: _confirmPasswordController,
+                          labelText: "confirm_password".tr,
+                          validator: (value) {
+                            return RegisterContant.validateConfirmPassword(
+                                value, _passwordController.text);
                           },
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15)),
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.fromLTRB(40, 18, 40, 18),
-                            child: Text("sign_up".tr,
-                                style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Color.fromRGBO(191, 252, 226, 1.0))),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-                          Get.toNamed(RouteHelper.signIn);
+                        )),
+                    Container(
+                      margin: EdgeInsets.only(top: 40.h),
+                      child: CustomButton(
+                        onPressed: () {
+                          _register();
                         },
-                        child: Text(
-                          'already_account'.tr,
-                          style: TextStyle(
-                              color: ColorResources.getPrimaryTextColor()),
-                        ),
+                        title: "sign_up".tr,
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 20.h),
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(RouteHelper.signIn);
+                      },
+                      child: Text(
+                        'already_account'.tr,
+                        style: robotoMedium.copyWith(
+                            color: ColorResources.getPrimaryTextColor()),
+                      ),
+                    ),
+                    SizedBox(height: 40.h),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -233,7 +203,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       final user = User(
         username: _usernameController.text,
         email: _emailController.text,
-        dob: _birthDay.value,
+        dob: _birthdayController.dateTime,
         password: _passwordController.text,
         confirmPassword: _confirmPasswordController.text,
         displayName: '${_firstnameController.text} ${_lastnameController.text}',

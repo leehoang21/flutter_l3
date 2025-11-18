@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:timesheet/controller/auth_controller.dart';
 import 'package:timesheet/helper/route_helper.dart';
 import 'package:timesheet/utils/color_resources.dart';
+import 'package:timesheet/utils/dimensions.dart';
 import 'package:timesheet/utils/images.dart';
+import 'package:timesheet/view/custom_button.dart';
 
+import '../../utils/styles.dart';
 import '../../view/text_field_widget.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -28,77 +32,62 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
         body: SingleChildScrollView(
       child: GetBuilder<AuthController>(
-        builder: (controller) => Opacity(
-          opacity: controller.loading ? 0.3 : 1,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.fromLTRB(100, 56, 100, 60),
-                child: Image.asset(
-                  Images.logo,
-                  colorBlendMode: BlendMode.modulate,
-                  color: ColorResources.getBackgroundColor(),
-                ),
+        builder: (controller) => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: EdgeInsets.fromLTRB(100.w, 56.h, 100.w, 60.h),
+              child: Image.asset(
+                Images.logo,
+                colorBlendMode: BlendMode.modulate,
+                color: ColorResources.getBackgroundColor(),
               ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                child: Column(
-                  children: [
-                    Text(
-                      "login_to_your_account".tr,
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 20),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(20.w, 0, 20.w, 20.h),
+              child: Column(
+                children: [
+                  Text(
+                    "login_to_your_account".tr,
+                    style: robotoBold.copyWith(
+                        fontSize: Dimensions.FONT_SIZE_LARGE),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 20.h),
+                    child: TextFieldWidget(
+                        isObscureText: false,
+                        controller: _usernameController,
+                        labelText: "username".tr),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(top: 20.h),
                       child: TextFieldWidget(
-                          isObscureText: false,
-                          controller: _usernameController,
-                          labelText: "username".tr),
-                    ),
-                    Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: TextFieldWidget(
-                          isObscureText: true,
-                          controller: _passwordController,
-                          labelText: "password".tr,
-                        )),
-                    Container(
-                      margin: const EdgeInsets.only(top: 40),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _login();
-                        },
-                        style: TextButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.fromLTRB(40, 18, 40, 18),
-                          child: Text("sign_in".tr,
-                              style: const TextStyle(
-                                  fontSize: 16,
-                                  color: Color.fromRGBO(191, 252, 226, 1.0))),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(RouteHelper.signUp);
+                        isObscureText: true,
+                        controller: _passwordController,
+                        labelText: "password".tr,
+                      )),
+                  Container(
+                    margin: EdgeInsets.only(top: 40.h),
+                    child: CustomButton(
+                      onPressed: () {
+                        _login();
                       },
-                      child: Text(
-                        'dont_have_account'.tr,
-                        style: TextStyle(
-                            color: ColorResources.getPrimaryTextColor()),
-                      ),
+                      title: "sign_in".tr,
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 20.h),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(RouteHelper.signUp);
+                    },
+                    child: Text('dont_have_account'.tr,
+                        style: robotoMedium.copyWith(
+                            color: ColorResources.getPrimaryTextColor())),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     ));

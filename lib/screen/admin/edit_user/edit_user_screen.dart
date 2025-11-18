@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:timesheet/controller/user_controller.dart';
 import 'package:timesheet/data/model/body/user.dart';
@@ -7,6 +8,8 @@ import 'package:timesheet/helper/date_converter.dart';
 import 'package:timesheet/screen/register/register_screen_contant.dart';
 import 'package:timesheet/utils/utils.dart';
 import 'package:timesheet/view/appbar_widget.dart';
+import 'package:timesheet/view/custom_button.dart';
+import 'package:timesheet/view/scaffold_widget.dart';
 import 'package:timesheet/view/text_field_widget.dart';
 
 import '../../../utils/color_resources.dart';
@@ -55,7 +58,8 @@ class _AdminEditUserScreenState extends State<AdminEditUserScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ScaffoldWidget(
+        padding: EdgeInsets.symmetric(horizontal: 10.w),
         appBar: AppBarWidget(title: 'edit_user'.tr),
         body: SingleChildScrollView(
           child: Form(
@@ -63,156 +67,142 @@ class _AdminEditUserScreenState extends State<AdminEditUserScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: TextFieldWidget(
-                          validator: RegisterContant.validateUserName,
-                          controller: _usernameController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          labelText: "username".tr,
-                        ),
+                Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      child: TextFieldWidget(
+                        validator: RegisterContant.validateUserName,
+                        controller: _usernameController,
+                        textInputAction: TextInputAction.next,
+                        isObscureText: false,
+                        labelText: "username".tr,
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: TextFieldWidget(
-                          controller: _firstnameController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          validator: RegisterContant.validateFirstName,
-                          labelText: "first_name".tr,
-                        ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      child: TextFieldWidget(
+                        controller: _firstnameController,
+                        textInputAction: TextInputAction.next,
+                        isObscureText: false,
+                        validator: RegisterContant.validateFirstName,
+                        labelText: "first_name".tr,
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: TextFieldWidget(
-                          controller: _lastnameController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          validator: RegisterContant.validateLastName,
-                          labelText: "last_name".tr,
-                        ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      child: TextFieldWidget(
+                        controller: _lastnameController,
+                        textInputAction: TextInputAction.next,
+                        isObscureText: false,
+                        validator: RegisterContant.validateLastName,
+                        labelText: "last_name".tr,
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: TextFieldWidget(
-                          controller: _genderController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          labelText: "gender".tr,
-                        ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      child: TextFieldWidget(
+                        controller: _genderController,
+                        textInputAction: TextInputAction.next,
+                        isObscureText: false,
+                        labelText: "gender".tr,
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: TextFieldWidget(
-                          controller: _birthdayController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          labelText: "birthday".tr,
-                          suffixIcon: IconButton(
-                            onPressed: () async {
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: _birthDay.value,
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime.now(),
-                              );
-                              if (pickedDate != null) {
-                                _birthDay.value = pickedDate;
-                                _birthdayController.text =
-                                    DateConverter.formatToDate(pickedDate);
-                              }
-                            },
-                            icon: Icon(
-                              Icons.calendar_month_outlined,
-                              color: ColorResources.getAcceptBtn(),
-                            ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      child: TextFieldWidget(
+                        controller: _birthdayController,
+                        textInputAction: TextInputAction.next,
+                        isObscureText: false,
+                        labelText: "birthday".tr,
+                        suffixIcon: IconButton(
+                          onPressed: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: _birthDay.value,
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime.now(),
+                            );
+                            if (pickedDate != null) {
+                              _birthDay.value = pickedDate;
+                              _birthdayController.text =
+                                  DateConverter.formatToDate(pickedDate);
+                            }
+                          },
+                          icon: Icon(
+                            Icons.calendar_month_outlined,
+                            color: ColorResources.getAcceptBtn(),
                           ),
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: TextFieldWidget(
-                          controller: _emailController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          validator: RegisterContant.validateEmail,
-                          labelText: "email".tr,
-                        ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      child: TextFieldWidget(
+                        controller: _emailController,
+                        textInputAction: TextInputAction.next,
+                        isObscureText: false,
+                        validator: RegisterContant.validateEmail,
+                        labelText: "email".tr,
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: TextFieldWidget(
-                          controller: _universityController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          labelText: "university".tr,
-                        ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      child: TextFieldWidget(
+                        controller: _universityController,
+                        textInputAction: TextInputAction.next,
+                        isObscureText: false,
+                        labelText: "university".tr,
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        child: TextFieldWidget(
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(1),
-                          ],
-                          controller: _studentstudyController,
-                          textInputAction: TextInputAction.next,
-                          isObscureText: false,
-                          labelText: "student_study_year".tr,
-                        ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 20),
+                      child: TextFieldWidget(
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          LengthLimitingTextInputFormatter(1),
+                        ],
+                        controller: _studentstudyController,
+                        textInputAction: TextInputAction.next,
+                        isObscureText: false,
+                        labelText: "student_study_year".tr,
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 40),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ElevatedButton(
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 40.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          SizedBox(
+                            width: 40.w,
+                          ),
+                          Expanded(
+                            child: CustomButton(
                               onPressed: () {
                                 Get.back();
                               },
-                              style: TextButton.styleFrom(
-                                backgroundColor: ColorResources.COLOR_HINT,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                              ),
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(40, 18, 40, 18),
-                                child: Text("cancel".tr,
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        color: Color.fromRGBO(
-                                            191, 252, 226, 1.0))),
-                              ),
+                              color: ColorResources.COLOR_HINT,
+                              title: "cancel".tr,
                             ),
-                            ElevatedButton(
+                          ),
+                          SizedBox(
+                            width: 40.w,
+                          ),
+                          Expanded(
+                            child: CustomButton(
                               onPressed: () {
                                 _edit();
                               },
-                              style: TextButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                              ),
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(40, 18, 40, 18),
-                                child: Text("save".tr,
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        color: Color.fromRGBO(
-                                            191, 252, 226, 1.0))),
-                              ),
+                              title: "save".tr,
                             ),
-                          ],
-                        ),
+                          ),
+                          SizedBox(
+                            width: 40.w,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:timesheet/controller/auth_controller.dart';
 import 'package:timesheet/controller/user_controller.dart';
 import 'package:timesheet/helper/route_helper.dart';
 import 'package:timesheet/view/scaffold_widget.dart';
-
-import '../../../data/model/body/user.dart';
 import '../../../view/appbar_widget.dart';
+import '../../../view/refresh_widget/refresh_widget.dart';
 import 'view/admin_user_item.dart';
 
 class AdminScreen extends StatefulWidget {
@@ -18,23 +16,6 @@ class AdminScreen extends StatefulWidget {
 }
 
 class _AdminScreenState extends State<AdminScreen> {
-  final PagingController<int, User> _pagingController =
-      PagingController(firstPageKey: 0);
-
-  @override
-  initState() {
-    super.initState();
-    _pagingController.addPageRequestListener((pageKey) async {
-      final result = await Get.find<UserController>().loadMore(pageKey + 1);
-      if (Get.find<UserController>().isLast.value) {
-        _pagingController.appendLastPage(result);
-      } else {
-        final nextPageKey = pageKey + 1;
-        _pagingController.appendPage(result, nextPageKey);
-      }
-    });
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -45,6 +26,7 @@ class _AdminScreenState extends State<AdminScreen> {
     return ScaffoldWidget(
       appBar: AppBarWidget(
         title: 'admin_panel'.tr,
+        leading: const SizedBox(),
         trailing: IconButton(
           icon: const Icon(Icons.logout),
           onPressed: () {
@@ -54,24 +36,26 @@ class _AdminScreenState extends State<AdminScreen> {
           },
         ),
       ),
-      body: RefreshIndicator(
-        onRefresh: () => Future.sync(
-          () => _pagingController.refresh(),
-        ),
-        child: PagedListView<int, User>(
-          padding: EdgeInsets.zero,
-          pagingController: _pagingController,
-          builderDelegate: PagedChildBuilderDelegate<User>(
-            itemBuilder: (context, item, index) => InkWell(
+      body: GetBuilder<UserController>(
+        builder: (controller) {
+          return RefreshWidget(
+            onRefresh: controller.onInit,
+            onLoadMore: controller.loadMore,
+            child: ListView.builder(
+              itemCount: controller.users.length,
+              itemBuilder: (context, index) => InkWell(
                 onTap: () {
                   Get.toNamed(RouteHelper.adminUserDetail, arguments: {
-                    'user': item,
+                    'user': controller.users[index],
                   });
                 },
                 child: UserAdminItem(
-                    data: item, pagingController: _pagingController)),
-          ),
-        ),
+                  data: controller.users[index],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

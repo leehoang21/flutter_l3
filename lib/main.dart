@@ -1,24 +1,20 @@
 import 'dart:io';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:timesheet/theme/dark_theme.dart';
 import 'package:timesheet/theme/light_theme.dart';
 import 'package:timesheet/utils/app_constants.dart';
 import 'package:timesheet/helper/internet_checker.dart';
+import 'package:timesheet/utils/dimensions.dart';
 import 'package:timesheet/utils/messages.dart';
 import 'package:timesheet/utils/vi_message_timeago.dart';
 import 'controller/localization_controller.dart';
-import 'firebase_options.dart';
 import 'helper/get_di.dart' as di;
-import 'helper/notification_helper.dart';
 import 'helper/responsive_helper.dart';
 import 'helper/route_helper.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -30,13 +26,13 @@ Future<void> main() async {
   }
   timeago.setLocaleMessages('vi', ViMessages());
   timeago.setLocaleMessages('vi_short', ViShortMessages());
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  NotificationHelper.initialize(
-    FlutterLocalNotificationsPlugin(),
-  );
-  FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+  // NotificationHelper.initialize(
+  //   FlutterLocalNotificationsPlugin(),
+  // );
+  // FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
 
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   if (ResponsiveHelper.isMobilePhone()) {
@@ -60,33 +56,41 @@ class _MyAppState extends State<MyApp> {
   bool isFirstBuild = true;
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<LocalizationController>(builder: (localizeController) {
-      FlutterNativeSplash.remove();
-      if (kDebugMode) {
-        print("Kết thúc init: ${DateTime.now()}");
-      }
-      return GetMaterialApp(
-        title: AppConstants.APP_NAME,
-        debugShowCheckedModeBanner: false,
-        navigatorKey: Get.key,
-        scrollBehavior: const MaterialScrollBehavior().copyWith(
-          dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch},
+    return ScreenUtilInit(
+        designSize: const Size(
+          Dimensions.widthDefault,
+          Dimensions.heightDefault,
         ),
-        locale: localizeController.locale,
-        theme: light(),
-        darkTheme: dark(),
-        translations: Messages(languages: widget.languages),
-        fallbackLocale: Locale(AppConstants.languages[0].languageCode,
-            AppConstants.languages[0].countryCode),
-        initialRoute: GetPlatform.isWeb
-            ? RouteHelper.getInitialRoute()
-            : RouteHelper.getSplashRoute(),
-        getPages: RouteHelper.routes,
-        defaultTransition: Transition.topLevel,
-        transitionDuration: const Duration(milliseconds: 250),
-        builder: _buildInternetChecker,
-      );
-    });
+        builder: (_, child) {
+          return GetBuilder<LocalizationController>(
+              builder: (localizeController) {
+            FlutterNativeSplash.remove();
+            if (kDebugMode) {
+              print("Kết thúc init: ${DateTime.now()}");
+            }
+            return GetMaterialApp(
+              title: AppConstants.APP_NAME,
+              debugShowCheckedModeBanner: false,
+              navigatorKey: Get.key,
+              scrollBehavior: const MaterialScrollBehavior().copyWith(
+                dragDevices: {PointerDeviceKind.mouse, PointerDeviceKind.touch},
+              ),
+              locale: localizeController.locale,
+              theme: light(),
+              darkTheme: dark(),
+              translations: Messages(languages: widget.languages),
+              fallbackLocale: Locale(AppConstants.languages[0].languageCode,
+                  AppConstants.languages[0].countryCode),
+              initialRoute: GetPlatform.isWeb
+                  ? RouteHelper.getInitialRoute()
+                  : RouteHelper.getSplashRoute(),
+              getPages: RouteHelper.routes,
+              defaultTransition: Transition.topLevel,
+              transitionDuration: const Duration(milliseconds: 250),
+              builder: _buildInternetChecker,
+            );
+          });
+        });
   }
 
   Widget _buildInternetChecker(BuildContext context, Widget? widget) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timesheet/utils/dimensions.dart';
 import 'package:timesheet/utils/images.dart';
 import 'image_app.dart';
 
@@ -11,7 +12,7 @@ class AvatarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final size0 = size ?? 44;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(100),
+      borderRadius: BorderRadius.circular(Dimensions.RADIUS_DEFAULT),
       child: ImageAppWidget(
         path: path,
         width: size0,

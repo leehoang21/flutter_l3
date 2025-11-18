@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:timesheet/view/scaffold_widget.dart';
 import '../../controller/auth_controller.dart';
-import '../../controller/splash_controller.dart';
 import '../../helper/route_helper.dart';
 import '../../utils/color_resources.dart';
 import '../../utils/dimensions.dart';
 import '../../utils/images.dart';
-import '../../view/no_internet_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -26,28 +25,20 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldWidget(
-      body: GetBuilder<SplashController>(builder: (splashController) {
-        return SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-            child: splashController.hasConnection
-                ? Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        Images.logo,
-                        width: 200,
-                        colorBlendMode: BlendMode.modulate,
-                        color: ColorResources.getBackgroundColor(),
-                      ),
-                      const SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                    ],
-                  )
-                : const NoInternetScreen(child: SplashScreen()),
-          ),
-        );
-      }),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              Images.logo,
+              width: 200.w,
+              colorBlendMode: BlendMode.modulate,
+              color: ColorResources.getBackgroundColor(),
+            ),
+            SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+          ],
+        ),
+      ),
     );
   }
 

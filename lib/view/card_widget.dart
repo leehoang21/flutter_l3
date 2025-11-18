@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:timesheet/utils/color_resources.dart';
 import 'package:timesheet/utils/dimensions.dart';
 
@@ -23,33 +24,24 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        textTheme: Theme.of(context).textTheme.apply(
-              bodyColor: ColorResources.getCardTextColor(),
-              displayColor: ColorResources.getCardTextColor(),
-            ),
+    return Container(
+      padding: padding ??
+          EdgeInsets.symmetric(
+            horizontal: 10.w,
+            vertical: 8.h,
+          ),
+      decoration: BoxDecoration(
+        shape: shape ?? BoxShape.rectangle,
+        color: backgroundColor ??
+            ColorResources.getBackgroundCardColor().withOpacity(0.3),
+        borderRadius: shape != null
+            ? null
+            : borderRadius ?? BorderRadius.circular(Dimensions.RADIUS_DEFAULT),
       ),
-      child: Container(
-        padding: padding ??
-            const EdgeInsets.symmetric(
-              horizontal: 4,
-              vertical: 8,
-            ),
-        decoration: BoxDecoration(
-          shape: shape ?? BoxShape.rectangle,
-          color: backgroundColor ??
-              ColorResources.getBackgroundCardColor().withOpacity(0.4),
-          borderRadius: shape != null
-              ? null
-              : borderRadius ??
-                  BorderRadius.circular(Dimensions.RADIUS_DEFAULT),
-        ),
-        child: SizedBox(
-          height: height,
-          width: width,
-          child: child,
-        ),
+      child: SizedBox(
+        height: height,
+        width: width,
+        child: child,
       ),
     );
   }

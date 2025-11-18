@@ -57,7 +57,7 @@ class ColorResources {
   }
 
   static Color getBackgroundCardColor() {
-    return !Get.isDarkMode ? const Color(0xFF343636) : const Color(0xFFFAFAFA);
+    return !Get.isDarkMode ? const Color(0xFF343636) : const Color(0xffeeeeee);
   }
 
   static Color getAppbarColor() {
@@ -188,6 +188,9 @@ class ColorResources {
     return Get.isDarkMode ? const Color(0xFFbd0a00) : const Color(0xFFff795b);
   }
 
+  static Color buttonColor1 = const Color(0xff384CFF);
+  static Color buttonColor2 = const Color(0xff00A3FF);
+
   ///#686868
   static const Color COLOR_PRIMARY = Color(0xFF003E47);
   static const Color COLOR_GREY = Color(0xFFA0A4A8);
@@ -240,6 +243,8 @@ class ColorResources {
   static Color backgroundColor = const Color(0xFFE5E5E5);
   static Color balanceTextColor = const Color(0xFF393939);
   static Color cardTextColor = const Color(0xFF303030);
+  static Color cardColor = const Color(0xffeeeeee);
+
   static Color cardOrangeColor = const Color(0xFFFFCB66);
   static Color cardPinkColor = const Color(0xFFF6BDE9);
   static Color cardPestColor = const Color(0xFFACD9B3);

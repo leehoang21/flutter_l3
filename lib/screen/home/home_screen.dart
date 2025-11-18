@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:timesheet/controller/post_controller.dart';
 import 'package:timesheet/data/model/body/post_model.dart';
 import 'package:timesheet/screen/home/view/post_item.dart';
 import 'package:timesheet/screen/home/view/save_post_widget.dart';
+import 'package:timesheet/utils/dimensions.dart';
+import 'package:timesheet/utils/styles.dart';
 import 'package:timesheet/view/scaffold_widget.dart';
 
 import '../../view/avatar_widget.dart';
+import '../../view/card_button_widget.dart';
+import '../../view/refresh_widget/refresh_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,23 +21,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final PagingController<int, PostModel> _pagingController =
-      PagingController(firstPageKey: 0);
-
-  @override
-  initState() {
-    super.initState();
-    _pagingController.addPageRequestListener((pageKey) async {
-      final result = await Get.find<PostController>().loadMore(pageKey + 1);
-      if (Get.find<PostController>().isLast.value) {
-        _pagingController.appendLastPage(result);
-      } else {
-        final nextPageKey = pageKey + 1;
-        _pagingController.appendPage(result, nextPageKey);
-      }
-    });
-  }
-
   @override
   void dispose() {
     super.dispose();
@@ -42,16 +29,41 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldWidget(
-      body: RefreshIndicator(
-        onRefresh: () => Future.sync(
-          () => _pagingController.refresh(),
-        ),
-        child: Column(
+      body: GetBuilder<PostController>(
+        builder: (controller) {
+          return RefreshWidget(
+            onRefresh: controller.onInit,
+            onLoadMore: controller.loadMore,
+            child: ListView.builder(
+              itemCount: controller.posts.length + 1,
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return _appbar(context);
+                }
+                return PostItem(
+                  data: controller.posts[index - 1],
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Column _appbar(BuildContext context) {
+    return Column(
+      children: [
+        Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 2),
-              child: InkWell(
-                onTap: () {
+            AvatarWidget(
+              path: "",
+              size: 50.sp,
+            ),
+            SizedBox(width: 20.w),
+            Expanded(
+              child: CardButtonWidget(
+                onPressed: () {
                   showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
@@ -61,48 +73,27 @@ class _HomeScreenState extends State<HomeScreen> {
                               bottom: MediaQuery.of(context).viewInsets.bottom,
                             ),
                             child: SavePostWidget(
-                                data: PostModel(),
-                                pagingController: _pagingController));
+                              data: PostModel(),
+                            ));
                       });
                 },
-                child: Row(
-                  children: [
-                    const AvatarWidget(path: ""),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                            top: 10, bottom: 10, left: 10),
-                        decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Colors.grey.withOpacity(0.5)),
-                          borderRadius: BorderRadius.circular(500),
-                        ),
-                        child: Text(
-                          'create_post'.tr,
-                        ),
-                      ),
+                child: Padding(
+                  padding: EdgeInsets.only(left: 10.w, top: 5.h, bottom: 5.h),
+                  child: Text(
+                    'What’s on your mind'.tr,
+                    style: robotoRegular.copyWith(
+                      fontSize: Dimensions.FONT_SIZE_SMALL,
                     ),
-                    const SizedBox(width: 10),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Expanded(
-              child: PagedListView<int, PostModel>(
-                pagingController: _pagingController,
-                builderDelegate: PagedChildBuilderDelegate<PostModel>(
-                  itemBuilder: (context, item, index) =>
-                      PostItem(data: item, pagingController: _pagingController),
+                  ),
                 ),
               ),
             ),
           ],
         ),
-      ),
+        SizedBox(
+          height: 20.h,
+        ),
+      ],
     );
   }
 }

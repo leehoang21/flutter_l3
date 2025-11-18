@@ -1038,5 +1038,7 @@
   "user_detail": "Chi tiết người dùng",
   "edit_user": "Chỉnh sửa người dùng",
   "ROLE_ADMIN": "Admin",
-  "ROLE_USER": "Người dùng"
+  "ROLE_USER": "Người dùng",
+  "What’s on your mind": "What’s on your mind",
+  "role": "Role"
 }

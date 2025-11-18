@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:timesheet/controller/user_controller.dart';
 import 'package:timesheet/utils/enum_role.dart';
 import 'package:timesheet/view/avatar_widget.dart';
@@ -13,10 +13,8 @@ import '../../../../utils/styles.dart';
 
 class UserAdminItem extends StatelessWidget {
   final User data;
-  final PagingController<int, User> pagingController;
 
-  const UserAdminItem(
-      {super.key, required this.data, required this.pagingController});
+  const UserAdminItem({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -25,18 +23,26 @@ class UserAdminItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Divider(),
+        SizedBox(
+          height: 10.h,
+        ),
         Row(
           children: [
-            const AvatarWidget(
+            AvatarWidget(
               path: '',
+              size: 50.sp,
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8.w),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(data.username ?? ''),
+                Text(
+                  data.username ?? '',
+                  style: robotoBold,
+                ),
                 Text(
                   data.email ?? "",
+                  style: robotoRegular,
                 ),
               ],
             ),
@@ -68,7 +74,6 @@ class UserAdminItem extends StatelessWidget {
                     await Get.toNamed(RouteHelper.adminEditUser, arguments: {
                       'user': data,
                     });
-                    pagingController.refresh();
                   },
                   child: Text(
                     'edit'.tr,
@@ -82,7 +87,6 @@ class UserAdminItem extends StatelessWidget {
                   onPressed: () async {
                     if (data.id != null && data.id! > 0) {
                       await Get.find<UserController>().lock(data.id!);
-                      pagingController.refresh();
                     }
                   },
                   child: Text(
@@ -97,24 +101,41 @@ class UserAdminItem extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 20),
-        Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: Text(
-            role != '' ? EnumRoleExtension.fromString(role).name.tr : 'none'.tr,
+        SizedBox(height: 20.h),
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: '${'role'.tr} : ',
+                style: robotoMedium,
+              ),
+              TextSpan(
+                text: role != ''
+                    ? EnumRoleExtension.fromString(role).name.tr
+                    : 'none'.tr,
+                style: robotoRegular,
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: 5),
-        Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: Text(
-            data.active == true ? 'active'.tr : 'inactive'.tr,
-            style: TextStyle(
-              color: data.active == true ? Colors.green : Colors.red,
-            ),
+        SizedBox(height: 10.h),
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: '${"status".tr} : ',
+                style: robotoMedium,
+              ),
+              TextSpan(
+                text: data.active == true ? 'active'.tr : 'inactive'.tr,
+                style: robotoRegular.copyWith(
+                  color: data.active == true ? Colors.green : Colors.red,
+                ),
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: 5),
+        SizedBox(height: 20.h),
       ],
     );
   }

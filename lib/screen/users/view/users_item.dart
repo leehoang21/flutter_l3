@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:timesheet/utils/styles.dart';
 import 'package:timesheet/view/avatar_widget.dart';
 import '../../../data/model/body/user.dart';
 import '../../../utils/enum_role.dart';
@@ -16,41 +18,65 @@ class UsersItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Divider(),
+        SizedBox(
+          height: 10.h,
+        ),
         Row(
           children: [
             const AvatarWidget(
               path: '',
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8.w),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(data.displayName ?? ''),
+                Text(
+                  data.username ?? '',
+                  style: robotoBold,
+                ),
                 Text(
                   data.email ?? "",
+                  style: robotoRegular,
                 ),
               ],
             ),
           ],
         ),
-        const SizedBox(height: 20),
-        Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: Text(
-            role != '' ? EnumRoleExtension.fromString(role).name.tr : 'none'.tr,
+        SizedBox(height: 20.h),
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: '${'role'.tr} : ',
+                style: robotoMedium,
+              ),
+              TextSpan(
+                text: role != ''
+                    ? EnumRoleExtension.fromString(role).name.tr
+                    : 'none'.tr,
+                style: robotoRegular,
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: 5),
-        Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: Text(
-            data.active == true ? 'active'.tr : 'inactive'.tr,
-            style: TextStyle(
-              color: data.active == true ? Colors.green : Colors.red,
-            ),
+        SizedBox(height: 10.h),
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: '${"status".tr} : ',
+                style: robotoMedium,
+              ),
+              TextSpan(
+                text: data.active == true ? 'active'.tr : 'inactive'.tr,
+                style: robotoRegular.copyWith(
+                  color: data.active == true ? Colors.green : Colors.red,
+                ),
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: 5),
+        SizedBox(height: 20.h),
       ],
     );
   }

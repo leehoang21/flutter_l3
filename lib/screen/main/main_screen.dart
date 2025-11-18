@@ -87,5 +87,5 @@ class AppBarMain extends StatelessWidget implements PreferredSize {
   Widget get child => Container();
 
   @override
-  Size get preferredSize => const Size.fromHeight(Dimensions.APPBAR_HIGHT_SIZE);
+  Size get preferredSize => Size.fromHeight(Dimensions.APPBAR_HIGHT_SIZE);
 }

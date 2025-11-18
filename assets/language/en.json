@@ -825,5 +825,7 @@
   "user_detail": "User Detail",
   "edit_user": "Edit User",
   "ROLE_ADMIN": "Admin",
-  "ROLE_USER": "User"
+  "ROLE_USER": "User",
+  "What’s on your mind": "What’s on your mind",
+  "role": "Role"
 }

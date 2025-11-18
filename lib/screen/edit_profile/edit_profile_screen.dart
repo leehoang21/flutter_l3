@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:timesheet/controller/auth_controller.dart';
 import 'package:timesheet/controller/user_controller.dart';
 import 'package:timesheet/view/appbar_widget.dart';
+import 'package:timesheet/view/custom_button.dart';
+import 'package:timesheet/view/date_field_widget.dart';
 import 'package:timesheet/view/scaffold_widget.dart';
-
-import '../../helper/date_converter.dart';
 import '../../utils/color_resources.dart';
 import '../../view/text_field_widget.dart';
 import 'edit_profile_screen_contant.dart';
@@ -23,11 +24,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController _firstnameController = TextEditingController();
   final TextEditingController _lastnameController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
-  final TextEditingController _birthdayController = TextEditingController();
+  final DateEditingController _birthdayController = DateEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _universityController = TextEditingController();
   final TextEditingController _studentstudyController = TextEditingController();
-  final _birthDay = DateTime.now().obs;
 
   @override
   void initState() {
@@ -39,9 +39,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ? user.displayName!.split(' ').sublist(1).join(' ')
         : '';
     _genderController.text = user.gender ?? '';
-    _birthDay.value = user.dob != null ? user.dob! : DateTime.now();
-    _birthdayController.text =
-        user.dob != null ? DateConverter.formatToDate(user.dob!) : '';
+    _birthdayController.dateTime = user.dob ?? DateTime.now();
     _emailController.text = user.email ?? '';
     _universityController.text = user.university ?? '';
     _studentstudyController.text =
@@ -57,7 +55,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         child: Column(
           children: [
             Container(
-              margin: const EdgeInsets.only(top: 20),
+              margin: EdgeInsets.only(top: 20.h),
               child: TextFieldWidget(
                 validator: EditProfileScreenContant.validateUserName,
                 controller: _usernameController,
@@ -67,7 +65,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 20),
+              margin: EdgeInsets.only(top: 20.h),
               child: TextFieldWidget(
                 controller: _firstnameController,
                 textInputAction: TextInputAction.next,
@@ -77,7 +75,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 20),
+              margin: EdgeInsets.only(top: 20.h),
               child: TextFieldWidget(
                 controller: _lastnameController,
                 textInputAction: TextInputAction.next,
@@ -87,7 +85,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 20),
+              margin: EdgeInsets.only(top: 20.h),
               child: TextFieldWidget(
                 controller: _genderController,
                 textInputAction: TextInputAction.next,
@@ -96,35 +94,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: TextFieldWidget(
+              margin: EdgeInsets.only(top: 20.h),
+              child: DateFieldWidget(
                 controller: _birthdayController,
-                textInputAction: TextInputAction.next,
-                isObscureText: false,
                 labelText: "birthday".tr,
-                suffixIcon: IconButton(
-                  onPressed: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: _birthDay.value,
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime.now(),
-                    );
-                    if (pickedDate != null) {
-                      _birthDay.value = pickedDate;
-                      _birthdayController.text =
-                          DateConverter.formatToDate(pickedDate);
-                    }
-                  },
-                  icon: Icon(
-                    Icons.calendar_month_outlined,
-                    color: ColorResources.getAcceptBtn(),
-                  ),
-                ),
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 20),
+              margin: EdgeInsets.only(top: 20.h),
               child: TextFieldWidget(
                 controller: _emailController,
                 textInputAction: TextInputAction.next,
@@ -158,54 +135,47 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 40),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: ColorResources.COLOR_HINT,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(40, 18, 40, 18),
-                      child: Text("cancel".tr,
-                          style: const TextStyle(
-                              fontSize: 16,
-                              color: Color.fromRGBO(191, 252, 226, 1.0))),
+                SizedBox(
+                  width: 40.w,
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 40.h),
+                    child: CustomButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      color: ColorResources.COLOR_HINT,
+                      title: "cancel".tr,
                     ),
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(top: 40),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      Get.find<UserController>().updateMySeft(
-                          Get.find<AuthController>().user.copyWith(
-                              username: _usernameController.text.trim(),
-                              displayName:
-                                  '${_firstnameController.text.trim()} ${_lastnameController.text.trim()}',
-                              dob: _birthDay.value,
-                              email: _emailController.text.trim(),
-                              gender: _genderController.text.trim(),
-                              university: _universityController.text.trim(),
-                              year: int.tryParse(
-                                  _studentstudyController.text.trim())));
-                    },
-                    style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(40, 18, 40, 18),
-                      child: Text("save".tr,
-                          style: const TextStyle(
-                              fontSize: 16,
-                              color: Color.fromRGBO(191, 252, 226, 1.0))),
+                SizedBox(
+                  width: 40.w,
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 40.h),
+                    child: CustomButton(
+                      onPressed: () async {
+                        Get.find<UserController>().updateMySeft(
+                            Get.find<AuthController>().user.copyWith(
+                                username: _usernameController.text.trim(),
+                                displayName:
+                                    '${_firstnameController.text.trim()} ${_lastnameController.text.trim()}',
+                                dob: _birthdayController.dateTime,
+                                email: _emailController.text.trim(),
+                                gender: _genderController.text.trim(),
+                                university: _universityController.text.trim(),
+                                year: int.tryParse(
+                                    _studentstudyController.text.trim())));
+                      },
+                      title: "save".tr,
                     ),
                   ),
+                ),
+                SizedBox(
+                  width: 40.w,
                 ),
               ],
             ),

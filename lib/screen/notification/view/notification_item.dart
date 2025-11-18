@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:timesheet/utils/color_resources.dart';
 import 'package:timesheet/utils/styles.dart';
 import '../../../data/model/body/notification_model.dart';
@@ -11,7 +12,7 @@ class NotificationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(12.sp),
       color: ColorResources.getPrimaryColor().withOpacity(0.5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -21,11 +22,11 @@ class NotificationItem extends StatelessWidget {
               children: [
                 TextSpan(
                   text: data.title,
-                  style: robotoBold.copyWith(fontSize: 14),
+                  style: robotoBold,
                 ),
                 TextSpan(
                   text: data.body,
-                  style: robotoRegular.copyWith(fontSize: 14),
+                  style: robotoRegular,
                 ),
               ],
             ),
@@ -33,7 +34,7 @@ class NotificationItem extends StatelessWidget {
           Text(
             data.date == null ? '' : timeagoFormat(data.date!),
             style: robotoRegular.copyWith(
-              fontSize: 12,
+              fontSize: 12.sp,
               color: ColorResources.getGreyBaseGray5(),
             ),
           ),

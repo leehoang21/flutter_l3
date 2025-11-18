@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ScaffoldWidget extends StatelessWidget {
   const ScaffoldWidget({
@@ -17,17 +18,18 @@ class ScaffoldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: padding ??
-            EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top,
-            ),
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top,
+        ),
         child: Stack(
           children: [
             Padding(
               padding: EdgeInsets.only(
-                top: appBar?.preferredSize.height ?? 16,
-                left: 16.0,
-                right: 16.0,
+                top: (appBar?.preferredSize.height ?? 16.h) +
+                    (padding?.vertical ?? 0),
+                left: padding?.horizontal ?? 16.w,
+                right: padding?.horizontal ?? 16.w,
+                bottom: padding?.vertical ?? 0,
               ),
               child: body,
             ),

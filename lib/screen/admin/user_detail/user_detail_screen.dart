@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:timesheet/helper/date_converter.dart';
+import 'package:timesheet/utils/dimensions.dart';
+import 'package:timesheet/utils/styles.dart';
 import 'package:timesheet/view/appbar_widget.dart';
 import 'package:timesheet/view/avatar_widget.dart';
 import 'package:timesheet/view/card_widget.dart';
@@ -31,52 +34,58 @@ class _AdminUserDetailScreenState extends State<AdminUserDetailScreen> {
     return ScaffoldWidget(
         appBar: AppBarWidget(title: 'user_detail'.tr),
         body: SingleChildScrollView(
-          child: CardWidget(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    const AvatarWidget(path: ''),
-                    const SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              user.username ?? '',
-                              style: const TextStyle(fontSize: 18),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20.h,
+              ),
+              Row(
+                children: [
+                  const AvatarWidget(path: ''),
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            user.username ?? '',
+                            style: robotoBold.copyWith(
+                                fontSize: Dimensions.FONT_SIZE_EXTRA_LARGE),
+                          ),
+                          SizedBox(width: 8.w),
+                          Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                                color: user.active == true
+                                    ? Colors.green
+                                    : Colors.red,
+                                borderRadius: BorderRadius.circular(4)),
+                            child: Text(
+                              user.active == true ? 'active'.tr : 'inactive'.tr,
+                              style: const TextStyle(),
                             ),
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                  color: user.active == true
-                                      ? Colors.green
-                                      : Colors.red,
-                                  borderRadius: BorderRadius.circular(4)),
-                              child: Text(
-                                user.active == true
-                                    ? 'active'.tr
-                                    : 'inactive'.tr,
-                                style: const TextStyle(),
-                              ),
-                            )
-                          ],
-                        ),
-                        Text(user.email ?? ""),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                CardWidget(
-                    child: Column(
+                          )
+                        ],
+                      ),
+                      Text(user.email ?? ""),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 20.h),
+              CardWidget(
+                child: Column(
                   children: [
                     ListTile(
-                      title: Text('display_name'.tr),
-                      subtitle: Text(user.displayName ?? ''),
+                      title: Text(
+                        'display_name'.tr,
+                        style: robotoMedium.copyWith(),
+                      ),
+                      subtitle: Text(
+                        user.displayName ?? '',
+                        style: robotoRegular.copyWith(),
+                      ),
                     ),
                     ListTile(
                       title: Text('email'.tr),
@@ -114,9 +123,9 @@ class _AdminUserDetailScreenState extends State<AdminUserDetailScreen> {
                           .trim()),
                     ),
                   ],
-                )),
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         ));
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:timesheet/controller/auth_controller.dart';
 import 'package:timesheet/helper/route_helper.dart';
@@ -21,8 +22,9 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(height: 20.h),
         _profile(),
-        const SizedBox(height: 20),
+        SizedBox(height: 20.h),
         MenuItem(
             icon: const Icon(Icons.edit),
             title: "edit_profile".tr,
@@ -42,7 +44,7 @@ class _MenuScreenState extends State<MenuScreen> {
           },
         ),
         //exit app
-        const SizedBox(height: 10),
+        SizedBox(height: 10.h),
         MenuItem(
           icon: const Icon(Icons.exit_to_app),
           title: "exit_app".tr,

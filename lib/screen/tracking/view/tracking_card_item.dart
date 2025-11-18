@@ -23,7 +23,7 @@ class TrackingCardItem extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: backgroudColor, width: 1),
-        borderRadius: const BorderRadius.all(
+        borderRadius: BorderRadius.all(
           Radius.circular(Dimensions.RADIUS_LARGE),
         ),
       ),
@@ -37,7 +37,7 @@ class TrackingCardItem extends StatelessWidget {
             ),
             decoration: BoxDecoration(
                 color: backgroudColor,
-                borderRadius: const BorderRadius.only(
+                borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(Dimensions.RADIUS_DEFAULT),
                   topRight: Radius.circular(Dimensions.RADIUS_DEFAULT),
                 )),
@@ -114,7 +114,7 @@ class TrackingCardItem extends StatelessWidget {
             ),
             decoration: BoxDecoration(
                 color: ColorResources.getBackgroundCardColor(),
-                borderRadius: const BorderRadius.only(
+                borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(Dimensions.RADIUS_DEFAULT),
                   bottomRight: Radius.circular(Dimensions.RADIUS_DEFAULT),
                 )),

@@ -11,26 +11,37 @@ class UserController extends GetxController implements GetxService {
 
   UserController({required this.repo});
   final List<User> _users = [];
-  final isLast = false.obs;
+  final _sLast = false.obs;
 
   List<User> get users => _users;
   SearchParam _params = SearchParam(pageIndex: 1, size: 10);
 
-  Future<List<User>> loadMore(int index) {
-    _params = _params.copyWith(pageIndex: index);
-    return _search(params: _params);
+  @override
+  Future<void> onInit() async {
+    _params = SearchParam(pageIndex: 1, size: 10);
+    await _search();
+    super.onInit();
+  }
+
+  Future<bool> loadMore() async {
+    if (_sLast.value) {
+      return false;
+    }
+    _params = _params.copyWith(pageIndex: _params.pageIndex! + 1);
+    await _search();
+    return _sLast.value;
   }
 
   Future<List<User>> search(String keyword) {
     _params = _params.copyWith(keyWord: keyword);
-    return _search(params: _params);
+    return _search();
   }
 
-  Future<List<User>> _search({required SearchParam params}) async {
-    Response response = await repo.search(params: params);
+  Future<List<User>> _search() async {
+    Response response = await repo.search(params: _params);
     if (response.statusCode == 200) {
       _users.clear();
-      isLast.value = response.body['last'] as bool;
+      _sLast.value = response.body['last'] as bool;
       final datas = response.body['content'] as List<dynamic>;
       for (var post in datas) {
         _users.add(User.fromJson(post));
