@@ -84,7 +84,7 @@ class AuthRepo extends GetxService {
     String deviceToken = '@';
     if (!GetPlatform.isWeb) {
       try {
-        // deviceToken = await firebaseHelper.firebaseMessaging.getToken() ?? '@';
+        deviceToken = await firebaseHelper.firebaseMessaging.getToken() ?? '@';
       } catch (e) {
         logger('Unable to get FCM token');
       }
